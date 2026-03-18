@@ -1,0 +1,20 @@
+{
+  "name": "crucible",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Crucible — a public component library by mkteagle",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r run dev",
+    "typecheck": "pnpm -r run typecheck",
+    "publish:all": "pnpm -r publish --access public"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}
