@@ -12,9 +12,9 @@ const config: StorybookConfig = {
     config.resolve = config.resolve ?? {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@crucible/mdx": path.resolve(__dirname, "../packages/mdx-wysiwyg/src/index.ts"),
-      "@crucible/dialog": path.resolve(__dirname, "../packages/dialog/src/index.ts"),
-      "@crucible/popover": path.resolve(__dirname, "../packages/popover/src/index.ts"),
+      "@crucible-ui/mdx": path.resolve(__dirname, "../packages/mdx-wysiwyg/src/index.ts"),
+      "@crucible-ui/dialog": path.resolve(__dirname, "../packages/dialog/src/index.ts"),
+      "@crucible-ui/popover": path.resolve(__dirname, "../packages/popover/src/index.ts"),
     };
     return config;
   },
