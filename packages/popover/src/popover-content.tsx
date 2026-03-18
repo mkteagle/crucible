@@ -23,7 +23,6 @@ export function PopoverContent({ children, ...props }: PopoverContentProps) {
   return (
     <div
       id={popoverId}
-      // @ts-expect-error — popover is a valid HTML attribute, not yet in React types
       popover="auto"
       {...props}
     >

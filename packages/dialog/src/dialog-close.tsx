@@ -2,7 +2,7 @@ import React from "react";
 import { useDialogContext } from "./dialog";
 
 export interface DialogCloseProps {
-  children: React.ReactElement;
+  children: React.ReactElement<{ onClick?: React.MouseEventHandler }>;
 }
 
 export function DialogClose({ children }: DialogCloseProps) {

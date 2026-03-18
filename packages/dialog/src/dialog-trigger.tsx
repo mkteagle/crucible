@@ -2,8 +2,7 @@ import React from "react";
 import { useDialogContext } from "./dialog";
 
 export interface DialogTriggerProps {
-  children: React.ReactElement;
-  asChild?: boolean;
+  children: React.ReactElement<{ onClick?: React.MouseEventHandler }>;
 }
 
 export function DialogTrigger({ children }: DialogTriggerProps) {
