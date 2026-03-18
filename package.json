@@ -11,6 +11,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  },
   "devDependencies": {
     "@storybook/addon-controls": "^8.6.0",
     "@storybook/addon-docs": "^8.6.0",
