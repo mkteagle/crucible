@@ -32,6 +32,7 @@ const config: StorybookConfig = {
       "@crucible-ui/mdx": path.resolve(__dirname, "../packages/mdx-wysiwyg/src/index.ts"),
       "@crucible-ui/dialog": path.resolve(__dirname, "../packages/dialog/src/index.ts"),
       "@crucible-ui/popover": path.resolve(__dirname, "../packages/popover/src/index.ts"),
+      "@crucible-ui/gridular": path.resolve(__dirname, "../packages/gridular/src/index.ts"),
     };
     return config;
   },
