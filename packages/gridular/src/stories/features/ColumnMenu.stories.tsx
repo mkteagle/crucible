@@ -6,7 +6,7 @@ import type { ColumnDef, FilterState } from '../../types';
 import { cn } from '../../lib/utils';
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Features/Column Menu',
+  title: 'Gridular/Features/Column Menu',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

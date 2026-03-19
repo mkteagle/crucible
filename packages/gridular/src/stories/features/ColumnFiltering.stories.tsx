@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { ColumnDef, FilterState } from '../../types';
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Features/Column Filtering',
+  title: 'Gridular/Features/Column Filtering',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

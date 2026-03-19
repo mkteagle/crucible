@@ -5,7 +5,7 @@ import type { ColumnDef, GroupingState } from '../../types';
 import '../../index.css';
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Customization/Themes',
+  title: 'Gridular/Customization/Themes',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

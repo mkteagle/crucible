@@ -37,7 +37,7 @@ const peopleColumns: ColumnDef[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Features/Grouping',
+  title: 'Gridular/Features/Grouping',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

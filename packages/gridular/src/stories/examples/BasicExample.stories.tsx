@@ -5,7 +5,7 @@ import type { ColumnDef } from '../../types';
 import '../../index.css';
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Examples/Basic Usage',
+  title: 'Gridular/Examples/Basic Usage',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

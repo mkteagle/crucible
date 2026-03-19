@@ -26,7 +26,7 @@ const columns: ColumnDef[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Features/Sorting',
+  title: 'Gridular/Features/Sorting',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

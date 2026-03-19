@@ -20,7 +20,7 @@ const sampleUsers: User[] = Array.from({ length: 50 }, (_, i) => ({
 }));
 
 const meta = {
-  title: 'Features/Context Menu',
+  title: 'Gridular/Features/Context Menu',
   component: DataGrid,
   parameters: {
     layout: 'padded',

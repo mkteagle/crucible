@@ -35,7 +35,7 @@ const peopleColumns: ColumnDef[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Features/Row Selection',
+  title: 'Gridular/Features/Row Selection',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

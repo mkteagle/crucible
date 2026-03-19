@@ -141,7 +141,7 @@ const characterColumns: ColumnDef<Character>[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Examples/Server Pagination (Potter DB)',
+  title: 'Gridular/Examples/Server Pagination (Potter DB)',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

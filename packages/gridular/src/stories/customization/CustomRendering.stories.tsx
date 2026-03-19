@@ -19,7 +19,7 @@ const generateData = (count: number) => {
 };
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Customization/Custom Rendering',
+  title: 'Gridular/Customization/Custom Rendering',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

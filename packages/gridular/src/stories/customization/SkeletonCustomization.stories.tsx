@@ -48,7 +48,7 @@ const mockData: User[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Customization/Skeleton Loading',
+  title: 'Gridular/Customization/Skeleton Loading',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

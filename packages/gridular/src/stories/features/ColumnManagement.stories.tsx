@@ -28,7 +28,7 @@ const columns: ColumnDef[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Features/Column Management',
+  title: 'Gridular/Features/Column Management',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

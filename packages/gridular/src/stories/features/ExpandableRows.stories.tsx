@@ -40,7 +40,7 @@ const peopleColumns: ColumnDef[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Features/Expandable Rows',
+  title: 'Gridular/Features/Expandable Rows',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

@@ -136,7 +136,7 @@ const peopleColumns: ColumnDef[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Examples/Comprehensive Demo',
+  title: 'Gridular/Examples/Comprehensive Demo',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',

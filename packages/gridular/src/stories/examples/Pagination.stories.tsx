@@ -46,7 +46,7 @@ const peopleColumns: ColumnDef[] = [
 ];
 
 const meta: Meta<typeof DataGrid> = {
-  title: 'Features/Pagination',
+  title: 'Gridular/Features/Pagination',
   component: DataGrid,
   parameters: {
     layout: 'fullscreen',
