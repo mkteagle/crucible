@@ -21,7 +21,7 @@ export function LinkPopover({
 
   return (
     <div
-      className={classNames?.linkPopover || "absolute z-50 flex items-center gap-2 px-2 py-2 rounded-lg"}
+      className={classNames?.linkPopover || "fixed z-50 flex items-center gap-2 px-2 py-2 rounded-lg"}
       style={{
         top: position.top,
         left: position.left,

@@ -160,6 +160,17 @@ export function useSlashCommands(
     setSlashFilter("");
   }, []);
 
+  // Like closeSlashMenu but also removes the trigger `/text` from the editor.
+  // Only removes if the menu is currently open to avoid accidentally deleting slashes elsewhere.
+  const closeSlashMenuAndClean = useCallback((currentFilter?: string) => {
+    if (slashOpen) {
+      removeTriggerSlash(currentFilter ?? slashFilter);
+    }
+    setSlashOpen(false);
+    setSlashMenuPos(null);
+    setSlashFilter("");
+  }, [slashOpen, slashFilter, removeTriggerSlash]);
+
   const handleSlashKeyDown = useCallback((
     event: React.KeyboardEvent<HTMLDivElement>,
     applyCommand: (action: CommandAction) => void
@@ -185,7 +196,7 @@ export function useSlashCommands(
       return true;
     }
     if (event.key === "Escape") {
-      closeSlashMenu();
+      closeSlashMenuAndClean();
       return true;
     }
     if (slashOpen && event.key === "Backspace") {
@@ -222,7 +233,7 @@ export function useSlashCommands(
       }, 0);
     }
     return false;
-  }, [slashOpen, filteredCommands, slashIndex, slashFilter, openSlashMenu, closeSlashMenu, removeTriggerSlash, getSlashFilterText]);
+  }, [slashOpen, filteredCommands, slashIndex, slashFilter, openSlashMenu, closeSlashMenu, closeSlashMenuAndClean, removeTriggerSlash, getSlashFilterText]);
 
   const selectCommand = useCallback((command: Command, applyCommand: (action: CommandAction) => void) => {
     removeTriggerSlash(slashFilter);
@@ -239,6 +250,7 @@ export function useSlashCommands(
     setSlashIndex,
     handleSlashKeyDown,
     closeSlashMenu,
+    closeSlashMenuAndClean,
     selectCommand,
     removeTriggerSlash,
   };

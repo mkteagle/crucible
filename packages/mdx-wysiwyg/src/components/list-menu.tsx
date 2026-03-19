@@ -1,4 +1,5 @@
 import type { MenuPosition, EditorClassNames } from "../types";
+import { BulletedListIcon, NumberedListIcon } from "./icons";
 
 export interface ListMenuProps {
   open: boolean;
@@ -21,7 +22,7 @@ export function ListMenu({
 
   return (
     <div
-      className={classNames?.listMenu || "absolute z-50 flex flex-col gap-1 px-2 py-2 rounded-lg"}
+      className={classNames?.listMenu || "fixed z-50 flex flex-col gap-1 px-2 py-2 rounded-lg"}
       style={{
         top: position.top,
         left: position.left,
@@ -41,7 +42,7 @@ export function ListMenu({
           onClose();
         }}
       >
-        <img src="/icons/editor/bulleted-list.svg" alt="" width={16} height={16} />
+        <BulletedListIcon />
         Bulleted list
       </button>
       <button
@@ -53,7 +54,7 @@ export function ListMenu({
           onClose();
         }}
       >
-        <img src="/icons/editor/numbered-list.svg" alt="" width={16} height={16} />
+        <NumberedListIcon />
         Numbered list
       </button>
     </div>

@@ -225,6 +225,11 @@ export function WysiwygEditor({
   }, [restoreSelection, scheduleSerialize]);
 
   const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+    // Always block Enter when slash menu is open — prevents carriage return regardless of stale closures
+    if (event.key === "Enter" && slashCommands.slashOpen) {
+      event.preventDefault();
+    }
+
     const handled = slashCommands.handleSlashKeyDown(event, applySlashCommand);
     if (handled) return;
 
@@ -490,7 +495,7 @@ export function WysiwygEditor({
           contentEditable
           suppressContentEditableWarning
           className={classNames?.editor || "min-h-90 focus:outline-none wysiwyg-editor"}
-          style={{ padding: "8px", minHeight: "500px", width: "100%", overflowWrap: "break-word", wordBreak: "break-word", minWidth: 0, maxWidth: "100%" }}
+          style={{ padding: "8px", minHeight: "500px", width: "100%", overflowWrap: "break-word", wordBreak: "break-word", minWidth: 0, maxWidth: "100%", color: "var(--mdx-editor-text-secondary, #333)" }}
           onInput={handleInput}
           onKeyDown={handleKeyDown}
           onKeyUp={saveCurrentSelection}

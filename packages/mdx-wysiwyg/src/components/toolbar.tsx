@@ -1,9 +1,15 @@
 import { useMemo, type RefObject } from "react";
 import type { EditorClassNames } from "../types";
+import {
+  BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon,
+  HeadingIcon, QuoteIcon, BulletedListIcon, LinkIcon,
+  AlignLeftIcon, AlignCenterIcon, AlignRightIcon, AlignJustifyIcon,
+  ClearFormattingIcon, AddImageIcon,
+} from "./icons";
 
 type ToolbarAction = {
   label: string;
-  icon: string;
+  icon: React.ReactNode;
   onClick: () => void;
 };
 
@@ -39,29 +45,29 @@ export function Toolbar({
   const toolbarActions = useMemo(() => {
     return {
       textStyle: [
-        { label: "Bold", icon: "/icons/editor/bold.svg", onClick: () => execCommand("bold") },
-        { label: "Italic", icon: "/icons/editor/italic.svg", onClick: () => execCommand("italic") },
-        { label: "Underline", icon: "/icons/editor/underline.svg", onClick: () => execCommand("underline") },
-        { label: "Strikethrough", icon: "/icons/editor/strikethrough.svg", onClick: () => execCommand("strikeThrough") },
+        { label: "Bold", icon: <BoldIcon />, onClick: () => execCommand("bold") },
+        { label: "Italic", icon: <ItalicIcon />, onClick: () => execCommand("italic") },
+        { label: "Underline", icon: <UnderlineIcon />, onClick: () => execCommand("underline") },
+        { label: "Strikethrough", icon: <StrikethroughIcon />, onClick: () => execCommand("strikeThrough") },
       ] as ToolbarAction[],
       blocks: [
-        { label: "Headings", icon: "/icons/editor/heading.svg", onClick: openHeadingMenu },
-        { label: "Quote", icon: "/icons/editor/quote.svg", onClick: () => execCommand("formatBlock", "blockquote") },
+        { label: "Headings", icon: <HeadingIcon />, onClick: openHeadingMenu },
+        { label: "Quote", icon: <QuoteIcon />, onClick: () => execCommand("formatBlock", "blockquote") },
       ] as ToolbarAction[],
       lists: [
-        { label: "Lists", icon: "/icons/editor/bulleted-list.svg", onClick: openListMenu },
+        { label: "Lists", icon: <BulletedListIcon />, onClick: openListMenu },
       ] as ToolbarAction[],
       link: [
-        { label: "Link", icon: "/icons/editor/link.svg", onClick: openLinkMenu },
+        { label: "Link", icon: <LinkIcon />, onClick: openLinkMenu },
       ] as ToolbarAction[],
       align: [
-        { label: "Align Left", icon: "/icons/editor/left-align.svg", onClick: () => execCommand("justifyLeft") },
-        { label: "Align Center", icon: "/icons/editor/center-align.svg", onClick: () => execCommand("justifyCenter") },
-        { label: "Align Right", icon: "/icons/editor/right-align.svg", onClick: () => execCommand("justifyRight") },
-        { label: "Justify", icon: "/icons/editor/justify.svg", onClick: () => execCommand("justifyFull") },
+        { label: "Align Left", icon: <AlignLeftIcon />, onClick: () => execCommand("justifyLeft") },
+        { label: "Align Center", icon: <AlignCenterIcon />, onClick: () => execCommand("justifyCenter") },
+        { label: "Align Right", icon: <AlignRightIcon />, onClick: () => execCommand("justifyRight") },
+        { label: "Justify", icon: <AlignJustifyIcon />, onClick: () => execCommand("justifyFull") },
       ] as ToolbarAction[],
       clear: [
-        { label: "Clear Formatting", icon: "/icons/editor/clear-formatting.svg", onClick: clearFormatting },
+        { label: "Clear Formatting", icon: <ClearFormattingIcon />, onClick: clearFormatting },
       ] as ToolbarAction[],
     };
   }, [execCommand, clearFormatting, openHeadingMenu, openListMenu, openLinkMenu]);
@@ -74,6 +80,11 @@ export function Toolbar({
     toolbarActions.align,
     toolbarActions.clear,
   ];
+
+  const btnStyle = {
+    background: "var(--mdx-editor-toolbar-bg, var(--mist, #eef2f5))",
+    color: "var(--mdx-editor-text-secondary, #666)",
+  };
 
   return (
     <div
@@ -88,8 +99,8 @@ export function Toolbar({
                 <button
                   key={action.label}
                   type="button"
-                  className={classNames?.toolbarButton || "p-2 rounded-lg transition-colors"}
-                  style={{ background: "var(--mdx-editor-toolbar-bg, var(--mist, #eef2f5))" }}
+                  className={classNames?.toolbarButton || "p-2 rounded-lg transition-colors hover:opacity-70"}
+                  style={btnStyle}
                   onClick={action.onClick}
                   onMouseDown={(event) => event.preventDefault()}
                   title={action.label}
@@ -97,7 +108,7 @@ export function Toolbar({
                   data-list-button={action.label === "Lists" ? "true" : undefined}
                   data-heading-button={action.label === "Headings" ? "true" : undefined}
                 >
-                  <img src={action.icon} alt={action.label} width={16} height={16} />
+                  {action.icon}
                 </button>
               ))}
               {index < groups.length - 1 ? (
@@ -114,12 +125,12 @@ export function Toolbar({
           <>
             <button
               type="button"
-              className={classNames?.toolbarButton || "p-2 rounded-lg transition-colors"}
-              style={{ background: "var(--mdx-editor-toolbar-bg, var(--mist, #eef2f5))" }}
+              className={classNames?.toolbarButton || "p-2 rounded-lg transition-colors hover:opacity-70"}
+              style={btnStyle}
               onClick={insertImage}
               title="Insert Image"
             >
-              <img src="/icons/editor/add-image.svg" alt="Insert Image" width={16} height={16} />
+              <AddImageIcon />
             </button>
             <div
               className={classNames?.toolbarSeparator || "h-6 w-px"}

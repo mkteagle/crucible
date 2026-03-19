@@ -19,7 +19,7 @@ export function HeadingMenu({
 
   return (
     <div
-      className={classNames?.headingMenu || "absolute z-50 flex flex-col gap-1 px-2 py-2 rounded-lg"}
+      className={classNames?.headingMenu || "fixed z-50 flex flex-col gap-1 px-2 py-2 rounded-lg"}
       style={{
         top: position.top,
         left: position.left,

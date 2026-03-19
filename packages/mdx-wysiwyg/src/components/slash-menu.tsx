@@ -1,4 +1,5 @@
 import type { Command, CommandAction, EditorClassNames, SlashMenuPosition } from "../types";
+import { COMMAND_ICONS } from "./icons";
 
 export interface SlashMenuProps {
   open: boolean;
@@ -65,7 +66,7 @@ export function SlashMenu({
             onMouseDown={(event) => event.preventDefault()}
             onClick={() => onSelectCommand(command, applyCommand)}
           >
-            <img src={command.icon} alt="" width={16} height={16} className="opacity-60" />
+            {(() => { const Icon = COMMAND_ICONS[command.action]; return Icon ? <span className="opacity-60 flex-shrink-0"><Icon /></span> : null; })()}
             {command.label}
           </button>
         ))

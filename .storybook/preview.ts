@@ -1,13 +1,14 @@
 import type { Preview } from "@storybook/react-vite";
+import "./storybook.css";
 
 const preview: Preview = {
   parameters: {
     layout: "padded",
     backgrounds: {
-      default: "dark",
+      default: "light",
       values: [
-        { name: "dark", value: "#0d0d0d" },
-        { name: "light", value: "#fafafa" },
+        { name: "light", value: "#f3f4f6" },
+        { name: "white", value: "#ffffff" },
       ],
     },
   },

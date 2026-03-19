@@ -1,6 +1,6 @@
 {
   "name": "@crucible-ui/popover",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Style-agnostic Popover primitive built on the native Popover API",
   "type": "module",
   "license": "MIT",

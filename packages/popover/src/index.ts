@@ -1,5 +1,5 @@
 export { Popover } from "./popover";
-export type { PopoverProps } from "./popover";
+export type { PopoverProps, PopoverPlacement, PopoverAlign } from "./popover";
 export { PopoverTrigger } from "./popover-trigger";
 export type { PopoverTriggerProps } from "./popover-trigger";
 export { PopoverContent } from "./popover-content";

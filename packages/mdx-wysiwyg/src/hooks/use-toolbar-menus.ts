@@ -33,8 +33,7 @@ export function useToolbarMenus(toolbarRef: RefObject<HTMLDivElement | null>) {
     const button = toolbar.querySelector<HTMLButtonElement>("button[data-link-button='true']");
     if (!button) return;
     const rect = button.getBoundingClientRect();
-    const toolbarRect = toolbar.getBoundingClientRect();
-    setLinkMenuPos({ top: rect.bottom - toolbarRect.top + 8, left: rect.left - toolbarRect.left });
+    setLinkMenuPos({ top: rect.bottom + 4, left: rect.left });
     setLinkMenuOpen((prev) => !prev);
     setLinkValue("");
   }, [toolbarRef]);
@@ -45,8 +44,7 @@ export function useToolbarMenus(toolbarRef: RefObject<HTMLDivElement | null>) {
     const button = toolbar.querySelector<HTMLButtonElement>("button[data-list-button='true']");
     if (!button) return;
     const rect = button.getBoundingClientRect();
-    const toolbarRect = toolbar.getBoundingClientRect();
-    setListMenuPos({ top: rect.bottom - toolbarRect.top + 8, left: rect.left - toolbarRect.left });
+    setListMenuPos({ top: rect.bottom + 4, left: rect.left });
     setListMenuOpen((prev) => !prev);
   }, [toolbarRef]);
 
@@ -56,8 +54,7 @@ export function useToolbarMenus(toolbarRef: RefObject<HTMLDivElement | null>) {
     const button = toolbar.querySelector<HTMLButtonElement>("button[data-heading-button='true']");
     if (!button) return;
     const rect = button.getBoundingClientRect();
-    const toolbarRect = toolbar.getBoundingClientRect();
-    setHeadingMenuPos({ top: rect.bottom - toolbarRect.top + 8, left: rect.left - toolbarRect.left });
+    setHeadingMenuPos({ top: rect.bottom + 4, left: rect.left });
     setHeadingMenuOpen((prev) => !prev);
   }, [toolbarRef]);
 

@@ -2,6 +2,10 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import type { EditorClassNames, EmojiPickerSlotProps } from "../types";
 import { useEditorConfig } from "../context/editor-provider";
 import type { ComponentType } from "react";
+import {
+  BoldIcon, ItalicIcon, StrikethroughIcon, LinkIcon,
+  H2Icon, H3Icon, QuoteIcon, ClearFormattingIcon,
+} from "./icons";
 
 type MdxEditorCommand = {
   label: string;
@@ -363,14 +367,14 @@ export function MdxEditor({ value, onChange, emojiPicker: EmojiPickerProp, class
 
   const bubbleActions = useMemo(
     () => [
-      { label: "Bold", icon: "/icons/editor/bold.svg", onClick: () => toggleWrap("**"), active: isWrapped("**") },
-      { label: "Italic", icon: "/icons/editor/italic.svg", onClick: () => toggleWrap("_"), active: isWrapped("_") },
-      { label: "Strikethrough", icon: "/icons/editor/strikethrough.svg", onClick: () => toggleWrap("~~"), active: isWrapped("~~") },
-      { label: "Link", icon: "/icons/editor/link.svg", onClick: () => toggleLink(), active: isLinked() },
-      { label: "H2", icon: "/icons/editor/h2.svg", onClick: () => toggleLinePrefix("## "), active: isLinePrefixed("## ") },
-      { label: "H3", icon: "/icons/editor/h3.svg", onClick: () => toggleLinePrefix("### "), active: isLinePrefixed("### ") },
-      { label: "Quote", icon: "/icons/editor/quote.svg", onClick: () => toggleLinePrefix("> "), active: isLinePrefixed("> ") },
-      { label: "Clear Formatting", icon: "/icons/editor/clear-formatting.svg", onClick: () => clearFormatting(), active: false },
+      { label: "Bold", icon: <BoldIcon />, onClick: () => toggleWrap("**"), active: isWrapped("**") },
+      { label: "Italic", icon: <ItalicIcon />, onClick: () => toggleWrap("_"), active: isWrapped("_") },
+      { label: "Strikethrough", icon: <StrikethroughIcon />, onClick: () => toggleWrap("~~"), active: isWrapped("~~") },
+      { label: "Link", icon: <LinkIcon />, onClick: () => toggleLink(), active: isLinked() },
+      { label: "H2", icon: <H2Icon />, onClick: () => toggleLinePrefix("## "), active: isLinePrefixed("## ") },
+      { label: "H3", icon: <H3Icon />, onClick: () => toggleLinePrefix("### "), active: isLinePrefixed("### ") },
+      { label: "Quote", icon: <QuoteIcon />, onClick: () => toggleLinePrefix("> "), active: isLinePrefixed("> ") },
+      { label: "Clear Formatting", icon: <ClearFormattingIcon />, onClick: () => clearFormatting(), active: false },
     ],
     [value, selectionRange]
   );
@@ -476,7 +480,7 @@ export function MdxEditor({ value, onChange, emojiPicker: EmojiPickerProp, class
               onClick={action.onClick}
               title={action.label}
             >
-              <img src={action.icon} alt={action.label} className="w-4 h-4" />
+              {action.icon}
             </button>
           ))}
         </div>
