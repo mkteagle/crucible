@@ -106,12 +106,44 @@ export function WysiwygEditor({
     scheduleSerialize();
   }, [checkIsEmpty, processInputRules, serializeNow, scheduleSerialize]);
 
+  // Direct DOM block-type change — avoids execCommand("formatBlock") which adds spurious newlines
+  const applyBlockType = useCallback((tag: string) => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+    const range = selection.getRangeAt(0);
+    const node = range.startContainer;
+    const block = (node instanceof HTMLElement ? node : node.parentElement)
+      ?.closest("p,div,blockquote,h1,h2,h3,h4,h5,h6");
+    if (!block || !block.parentNode) return;
+    const newBlock = document.createElement(tag);
+    newBlock.innerHTML = block.innerHTML || "<br />";
+    block.parentNode.replaceChild(newBlock, block);
+    // Restore cursor to end of new block
+    const newRange = document.createRange();
+    const last = newBlock.lastChild;
+    if (last?.nodeType === Node.TEXT_NODE) {
+      newRange.setStart(last, (last as Text).length);
+    } else if (last) {
+      newRange.setStartAfter(last);
+    } else {
+      newRange.setStart(newBlock, 0);
+    }
+    newRange.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(newRange);
+  }, []);
+
   const execCommandWithSelection = useCallback((command: string, commandValue?: string) => {
     editorRef.current?.focus();
     restoreSelection();
+    if (command === "formatBlock" && commandValue) {
+      applyBlockType(commandValue);
+      handleInput();
+      return;
+    }
     document.execCommand(command, false, commandValue);
     handleInput();
-  }, [restoreSelection, handleInput]);
+  }, [restoreSelection, handleInput, applyBlockType]);
 
   const clearFormatting = useCallback(() => {
     editorRef.current?.focus();
@@ -122,12 +154,12 @@ export function WysiwygEditor({
       const node = range.startContainer;
       const block = (node instanceof HTMLElement ? node : node.parentElement)?.closest("h1,h2,h3,h4,h5,h6,blockquote");
       if (block) {
-        document.execCommand("formatBlock", false, "p");
+        applyBlockType("p");
       }
     }
     document.execCommand("removeFormat");
     handleInput();
-  }, [restoreSelection, handleInput]);
+  }, [restoreSelection, handleInput, applyBlockType]);
 
   const applySlashCommand = useCallback((action: CommandAction) => {
     editorRef.current?.focus();
@@ -187,10 +219,10 @@ export function WysiwygEditor({
         appleMusicEmbed.insertAppleMusicDropzone();
       }
     } else {
-      document.execCommand("formatBlock", false, action);
+      applyBlockType(action);
     }
     serializeNow();
-  }, [restoreSelection, mediaUpload, youtubeEmbed, appleMusicEmbed, serializeNow, slots, plugins]);
+  }, [restoreSelection, mediaUpload, youtubeEmbed, appleMusicEmbed, serializeNow, slots, plugins, applyBlockType]);
 
   const handleAppleMusicSelect = useCallback((item: { id: string; type: "song" | "album"; name?: string; artistName?: string; artworkUrl?: string }) => {
     setShowAppleMusicPicker(false);
@@ -271,6 +303,26 @@ export function WysiwygEditor({
       }
     }
 
+    // Backspace: delete figure/dropzone before cursor
+    if (event.key === "Backspace") {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+      const range = selection.getRangeAt(0);
+      if (!range.collapsed) return;
+
+      const node = range.startContainer;
+      const curBlock = (node instanceof HTMLElement ? node : node.parentElement)?.closest("p,div,li");
+      if (curBlock && range.startOffset === 0 && !(curBlock.textContent || "").trim()) {
+        const prevEl = curBlock.previousElementSibling as HTMLElement | null;
+        if (prevEl && (prevEl.tagName === "FIGURE" || prevEl.dataset.dropzone || prevEl.tagName === "HR")) {
+          event.preventDefault();
+          prevEl.remove();
+          scheduleSerialize();
+          return;
+        }
+      }
+    }
+
     // Backspace at start of blockquote/heading: convert to paragraph
     if (event.key === "Backspace") {
       const selection = window.getSelection();
@@ -314,6 +366,14 @@ export function WysiwygEditor({
       }
 
       if (atStart) {
+        // Check if previous sibling is a media figure or dropzone — delete it instead
+        const prevEl = block.previousElementSibling as HTMLElement | null;
+        if (prevEl && (prevEl.tagName === "FIGURE" || prevEl.dataset.dropzone || prevEl.tagName === "HR")) {
+          event.preventDefault();
+          prevEl.remove();
+          scheduleSerialize();
+          return;
+        }
         event.preventDefault();
         const paragraph = document.createElement("p");
         paragraph.innerHTML = block.innerHTML || "<br />";
@@ -324,6 +384,28 @@ export function WysiwygEditor({
         selection.removeAllRanges();
         selection.addRange(newRange);
         scheduleSerialize();
+      }
+    }
+
+    // Delete key: remove figure/dropzone after cursor
+    if (event.key === "Delete") {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+      const range = selection.getRangeAt(0);
+      if (!range.collapsed) return;
+      const node = range.startContainer;
+      const block = (node instanceof HTMLElement ? node : node.parentElement)?.closest("p,div,li");
+      if (!block) return;
+      const blockText = (block.textContent || "").trim();
+      const atEnd = range.startOffset === (node.nodeType === Node.TEXT_NODE ? (node as Text).length : (node as Element).childNodes.length);
+      if ((blockText === "" || atEnd) && block.nextElementSibling) {
+        const nextEl = block.nextElementSibling as HTMLElement;
+        if (nextEl.tagName === "FIGURE" || nextEl.dataset.dropzone || nextEl.tagName === "HR") {
+          event.preventDefault();
+          nextEl.remove();
+          scheduleSerialize();
+          return;
+        }
       }
     }
   }, [slashCommands, applySlashCommand, scheduleSerialize]);
