@@ -116,7 +116,7 @@ export const Default: Story = {
   render: () => (
     <>
       <style>{dialogCSS}</style>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
         <Dialog>
           <DialogTrigger>
             <button className="inline-flex items-center gap-[7px] px-5 py-[9px] rounded-[10px] text-[13.5px] font-medium cursor-pointer tracking-[-0.01em] transition-[opacity,transform] hover:opacity-[0.88] active:scale-[0.97] bg-orange-500 text-white shadow-[0_4px_16px_rgba(249,115,22,0.28)] border-none whitespace-nowrap">
@@ -165,7 +165,7 @@ export const Destructive: Story = {
   render: () => (
     <>
       <style>{dialogCSS}</style>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
         <Dialog>
           <DialogTrigger>
             <button className="inline-flex items-center gap-[7px] px-5 py-[9px] rounded-[10px] text-[13.5px] font-medium cursor-pointer tracking-[-0.01em] transition-[opacity,transform] hover:opacity-[0.88] active:scale-[0.97] bg-red-50 text-red-600 border border-red-200 whitespace-nowrap">
@@ -224,7 +224,7 @@ export const WithForm: Story = {
   render: () => (
     <>
       <style>{dialogCSS}</style>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
         <Dialog>
           <DialogTrigger>
             <button className="inline-flex items-center gap-[7px] px-5 py-[9px] rounded-[10px] text-[13.5px] font-medium cursor-pointer tracking-[-0.01em] transition-[opacity,transform] hover:opacity-[0.88] active:scale-[0.97] bg-white text-gray-700 border border-black/[0.1] whitespace-nowrap">
@@ -321,7 +321,7 @@ export const CommandPalette: Story = {
     return (
       <>
         <style>{`${dialogCSS} dialog { min-width: 460px; }`}</style>
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+        <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
           <Dialog>
             <DialogTrigger>
               <button className="inline-flex items-center gap-2.5 px-5 py-[9px] rounded-[10px] text-[13.5px] font-medium cursor-pointer tracking-[-0.01em] transition-[opacity,transform] hover:opacity-[0.88] active:scale-[0.97] bg-white text-gray-400 border border-black/[0.1] whitespace-nowrap">

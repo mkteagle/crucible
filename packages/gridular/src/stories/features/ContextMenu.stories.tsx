@@ -23,8 +23,15 @@ const meta = {
   title: 'Gridular/Features/Context Menu',
   component: DataGrid,
   parameters: {
-    layout: 'padded',
+    layout: 'fullscreen',
   },
+  decorators: [
+    (Story: any) => (
+      <div style={{ padding: '2rem', minHeight: '100vh', background: '#f5f5f5', fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+        <Story />
+      </div>
+    ),
+  ],
   tags: ['autodocs'],
 } satisfies Meta<typeof DataGrid>;
 

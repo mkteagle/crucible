@@ -56,9 +56,9 @@ const meta: Meta<typeof DataGrid> = {
   decorators: [
     (Story) => (
       <div style={{
-        padding: '2rem',
+        padding: '2rem', fontFamily: '"DM Sans", system-ui, sans-serif',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%)',
+        background: '#f5f5f5',
       }}>
         <style>{`
           .skeleton-purple {
@@ -120,9 +120,9 @@ export const Default: Story = {
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Default Skeleton</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Default Skeleton</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Default skeleton loading state with standard colors and animation.
           </p>
           <p className="font-ui text-xs text-gray-500">
@@ -162,9 +162,9 @@ export const CustomColors: Story = {
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Custom Colors (Purple)</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Custom Colors (Purple)</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Skeleton with custom gradient colors using a purple theme.
           </p>
           <pre className="font-mono text-xs bg-gray-100 p-2 rounded overflow-x-auto">
@@ -210,9 +210,9 @@ export const SlowAnimation: Story = {
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Slow Animation</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Slow Animation</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Skeleton with a slower animation duration (3 seconds).
           </p>
           <pre className="font-mono text-xs bg-gray-100 p-2 rounded overflow-x-auto">
@@ -256,9 +256,9 @@ export const FastAnimation: Story = {
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Fast Animation</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Fast Animation</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Skeleton with a faster animation duration (0.8 seconds).
           </p>
           <pre className="font-mono text-xs bg-gray-100 p-2 rounded overflow-x-auto">
@@ -302,9 +302,9 @@ export const NoAnimation: Story = {
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">No Animation</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">No Animation</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Static skeleton without animation (useful for reduced motion preferences).
           </p>
           <pre className="font-mono text-xs bg-gray-100 p-2 rounded overflow-x-auto">
@@ -349,9 +349,9 @@ export const CustomDimensions: Story = {
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Custom Dimensions</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Custom Dimensions</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Skeleton with custom width, height, and border radius.
           </p>
           <pre className="font-mono text-xs bg-gray-100 p-2 rounded overflow-x-auto">
@@ -447,9 +447,9 @@ export const BrandColors: Story = {
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Brand Colors</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Brand Colors</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Skeleton using copper brand colors to match the grid theme with slower animation.
           </p>
           <pre className="font-mono text-xs bg-gray-100 p-2 rounded overflow-x-auto">

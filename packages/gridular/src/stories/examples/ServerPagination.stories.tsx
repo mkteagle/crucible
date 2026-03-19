@@ -4,94 +4,64 @@ import { DataGrid } from '../../DataGrid';
 import type { ColumnDef } from '../../types';
 import '../../index.css';
 
-// Potter DB API Types
+// Potter DB REST API Types
 interface Character {
-  slug: string;
+  id: string;
   name: string;
   born: string | null;
-  died: string | null;
+  house: string | null;
   gender: string | null;
   species: string | null;
   bloodStatus: string | null;
-  house: string | null;
+  slug: string;
 }
 
-interface PageInfo {
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-  startCursor: string | null;
-  endCursor: string | null;
-  totalCount?: number;
-}
-
-interface CharactersResponse {
-  data: {
-    characters: {
-      edges: Array<{
-        node: Character;
-        cursor: string;
-      }>;
-      pageInfo: PageInfo;
-      totalCount?: number;
+interface PotterDBResponse {
+  data: Array<{
+    id: string;
+    attributes: {
+      slug: string;
+      name: string;
+      born: string | null;
+      house: string | null;
+      gender: string | null;
+      species: string | null;
+      blood_status: string | null;
+    };
+  }>;
+  meta: {
+    pagination: {
+      current: number;
+      next: number | null;
+      last: number;
+      records: number;
     };
   };
 }
 
-// GraphQL query function
-const fetchCharacters = async (
-  pageSize: number,
-  cursor?: string
-): Promise<CharactersResponse> => {
-  const query = `
-    query GetCharacters($first: Int!, $after: String) {
-      characters(first: $first, after: $after) {
-        edges {
-          node {
-            slug
-            name
-            born
-            died
-            gender
-            species
-            bloodStatus
-            house
-          }
-          cursor
-        }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          startCursor
-          endCursor
-        }
-        totalCount
-      }
-    }
-  `;
+const BASE_URL = 'https://api.potterdb.com/v1';
 
-  const response = await fetch("/api/potterdb/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query,
-      variables: {
-        first: pageSize,
-        after: cursor,
-      },
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return data;
+const fetchCharacters = async (page: number, pageSize: number): Promise<{ characters: Character[]; totalCount: number; lastPage: number }> => {
+  const url = `${BASE_URL}/characters?page[number]=${page}&page[size]=${pageSize}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  const json: PotterDBResponse = await response.json();
+  return {
+    characters: json.data.map((item) => ({
+      id: item.id,
+      slug: item.attributes.slug,
+      name: item.attributes.name,
+      born: item.attributes.born,
+      house: item.attributes.house,
+      gender: item.attributes.gender,
+      species: item.attributes.species,
+      bloodStatus: item.attributes.blood_status,
+    })),
+    totalCount: json.meta.pagination.records,
+    lastPage: json.meta.pagination.last,
+  };
 };
 
-// Column definitions
 const characterColumns: ColumnDef<Character>[] = [
   {
     id: 'name',
@@ -128,14 +98,14 @@ const characterColumns: ColumnDef<Character>[] = [
     id: 'bloodStatus',
     key: 'bloodStatus',
     header: 'Blood Status',
-    width: 150,
+    width: 160,
     render: (row) => row.bloodStatus || 'Unknown',
   },
   {
     id: 'born',
     key: 'born',
     header: 'Born',
-    width: 150,
+    width: 180,
     render: (row) => row.born || 'Unknown',
   },
 ];
@@ -150,8 +120,9 @@ const meta: Meta<typeof DataGrid> = {
     (Story) => (
       <div style={{
         padding: '2rem',
+        fontFamily: '"DM Sans", system-ui, sans-serif',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%)',
+        background: '#f5f5f5',
       }}>
         <Story />
       </div>
@@ -168,90 +139,64 @@ export const PotterDBPagination: Story = {
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize, setPageSize] = useState(20);
     const [isLoading, setIsLoading] = useState(false);
-    const [cursors, setCursors] = useState<(string | undefined)[]>([undefined]);
-    const [totalCount, setTotalCount] = useState<number>(0);
+    const [totalCount, setTotalCount] = useState(0);
+    const hasLoadedRef = useRef(false);
 
-    const cursorsRef = useRef(cursors);
-    cursorsRef.current = cursors;
-    const hasLoadedInitialRef = useRef(false);
-
-    const loadPage = useCallback(async (page: number) => {
+    const loadPage = useCallback(async (page: number, size: number) => {
       setIsLoading(true);
       try {
-        const cursor = cursorsRef.current[page];
-        const response = await fetchCharacters(pageSize, cursor);
-        const edges = response.data.characters.edges;
-
-        setCharacters(edges.map(edge => edge.node));
-
-        // Store the total count if available
-        if (response.data.characters.totalCount) {
-          setTotalCount(response.data.characters.totalCount);
-        }
-
-        // Store the next cursor if we haven't seen it
-        if (response.data.characters.pageInfo.endCursor && !cursorsRef.current[page + 1]) {
-          setCursors(prev => [...prev, response.data.characters.pageInfo.endCursor ?? undefined]);
-        }
+        const result = await fetchCharacters(page + 1, size);
+        setCharacters(result.characters);
+        setTotalCount(result.totalCount);
       } catch (error) {
-        console.error("Failed to fetch characters:", error);
+        console.error('Failed to fetch characters:', error);
       } finally {
         setIsLoading(false);
       }
-    }, [pageSize]);
+    }, []);
 
-    // Load initial data
     useEffect(() => {
-      if (!hasLoadedInitialRef.current) {
-        hasLoadedInitialRef.current = true;
-        loadPage(0);
+      if (!hasLoadedRef.current) {
+        hasLoadedRef.current = true;
+        loadPage(0, pageSize);
       }
     }, []);
 
-    const handlePageChange = useCallback((newPage: number) => {
-      setPageIndex(newPage);
-      loadPage(newPage);
-    }, [loadPage]);
-
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">🪄 Potter DB - Server Pagination</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
-            Real-time data from the Potter DB GraphQL API with server-side pagination.
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <p className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Potter DB — Server Pagination</p>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
+            Real data from the <a href="https://potterdb.com" target="_blank" rel="noopener" className="text-indigo-500 hover:underline">Potter DB</a> REST API with server-side pagination. {totalCount > 0 && <span className="text-gray-500">{totalCount.toLocaleString()} total characters.</span>}
           </p>
-          <div className="font-ui text-xs text-gray-500 space-y-1">
-            <p>• Data is fetched from the server for each page change</p>
-            <p>• Uses cursor-based pagination with GraphQL</p>
-            <p>• Supports sorting and grouping on client-side after fetch</p>
-            {isLoading && <p className="text-copper font-semibold">⏳ Loading...</p>}
-          </div>
         </div>
         <div style={{ height: '600px' }}>
           <DataGrid
-          gridId="potter-db-pagination"
-          columns={characterColumns}
-          data={characters}
-          getRowId={(row) => row.slug}
-          isLoading={isLoading}
-          loadingMessage="Fetching magical data from Potter DB..."
-          emptyMessage="No characters found"
-          pagination={{
-            pageIndex,
-            pageSize,
-            totalRows: totalCount,
-            manualPagination: true,
-            onPageChange: handlePageChange,
-            onPageSizeChange: (newSize) => {
-              setPageSize(newSize);
-              setPageIndex(0);
-              setCursors([undefined]);
-              loadPage(0);
-            },
-            pageSizeOptions: [10, 20, 50],
-          }}
-          enableSorting
-          enableColumnResize
+            gridId="potter-db-pagination"
+            columns={characterColumns}
+            data={characters}
+            getRowId={(row) => row.id}
+            isLoading={isLoading}
+            loadingMessage="Fetching magical data from Potter DB..."
+            emptyMessage="No characters found"
+            pagination={{
+              pageIndex,
+              pageSize,
+              totalRows: totalCount,
+              manualPagination: true,
+              onPageChange: (newPage) => {
+                setPageIndex(newPage);
+                loadPage(newPage, pageSize);
+              },
+              onPageSizeChange: (newSize) => {
+                setPageSize(newSize);
+                setPageIndex(0);
+                loadPage(0, newSize);
+              },
+              pageSizeOptions: [10, 20, 50],
+            }}
+            enableSorting
+            enableColumnResize
           />
         </div>
       </div>
@@ -269,58 +214,37 @@ export const PotterDBWithGrouping: Story = {
     const [isLoadingAll, setIsLoadingAll] = useState(false);
     const [loadedAll, setLoadedAll] = useState(false);
     const [groupingEnabled, setGroupingEnabled] = useState(false);
-    const [cursors, setCursors] = useState<(string | undefined)[]>([undefined]);
-    const [totalCount, setTotalCount] = useState<number>(0);
+    const [totalCount, setTotalCount] = useState(0);
+    const hasLoadedRef = useRef(false);
 
-    const cursorsRef = useRef(cursors);
-    cursorsRef.current = cursors;
-    const hasLoadedInitialRef = useRef(false);
-
-    // Load single page
-    const loadPage = useCallback(async (page: number) => {
+    const loadPage = useCallback(async (page: number, size: number) => {
       setIsLoading(true);
       try {
-        const cursor = cursorsRef.current[page];
-        const response = await fetchCharacters(pageSize, cursor);
-        const edges = response.data.characters.edges;
-
-        setCharacters(edges.map(edge => edge.node));
-
-        if (response.data.characters.totalCount) {
-          setTotalCount(response.data.characters.totalCount);
-        }
-
-        if (response.data.characters.pageInfo.endCursor && !cursorsRef.current[page + 1]) {
-          setCursors(prev => [...prev, response.data.characters.pageInfo.endCursor ?? undefined]);
-        }
+        const result = await fetchCharacters(page + 1, size);
+        setCharacters(result.characters);
+        setTotalCount(result.totalCount);
       } catch (error) {
-        console.error("Failed to fetch characters:", error);
+        console.error('Failed to fetch characters:', error);
       } finally {
         setIsLoading(false);
       }
-    }, [pageSize]);
+    }, []);
 
-    // Load ALL characters for grouping
     const fetchAllCharacters = useCallback(async () => {
       setIsLoadingAll(true);
       let allData: Character[] = [];
-      let cursor: string | undefined = undefined;
-      let fetchCount = 0;
-      const maxFetches = 20; // Safety limit
+      let page = 1;
 
       try {
-        while (fetchCount < maxFetches) {
-          const response = await fetchCharacters(50, cursor);
-          const edges = response.data.characters.edges;
-          allData = [...allData, ...edges.map(e => e.node)];
+        // Fetch first page to get total
+        const first = await fetchCharacters(1, 50);
+        allData = first.characters;
+        const lastPage = first.lastPage;
 
-          fetchCount++;
-
-          if (!response.data.characters.pageInfo.hasNextPage) {
-            break;
-          }
-
-          cursor = response.data.characters.pageInfo.endCursor ?? undefined;
+        // Fetch remaining pages in batches
+        for (page = 2; page <= Math.min(lastPage, 20); page++) {
+          const result = await fetchCharacters(page, 50);
+          allData = [...allData, ...result.characters];
         }
 
         setAllCharacters(allData);
@@ -328,91 +252,57 @@ export const PotterDBWithGrouping: Story = {
         setLoadedAll(true);
         setGroupingEnabled(true);
       } catch (error) {
-        console.error("Failed to fetch all characters:", error);
+        console.error('Failed to fetch all characters:', error);
       } finally {
         setIsLoadingAll(false);
       }
     }, []);
 
-    // Load initial page
     useEffect(() => {
-      if (!hasLoadedInitialRef.current && !groupingEnabled) {
-        hasLoadedInitialRef.current = true;
-        loadPage(0);
+      if (!hasLoadedRef.current) {
+        hasLoadedRef.current = true;
+        loadPage(0, pageSize);
       }
-    }, [groupingEnabled, loadPage]);
-
-    const handlePageChange = useCallback((newPage: number) => {
-      setPageIndex(newPage);
-      loadPage(newPage);
-    }, [loadPage]);
-
-    const handleLoadAllForGrouping = () => {
-      fetchAllCharacters();
-    };
-
-    const handleDisableGrouping = () => {
-      setGroupingEnabled(false);
-      setPageIndex(0);
-      loadPage(0);
-    };
+    }, []);
 
     const displayData = groupingEnabled ? allCharacters : characters;
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">🪄 Potter DB - Grouping with Load All</h3>
-          <p className="font-ui text-sm text-gray-600 mb-3">
-            Demonstrates the tradeoff between server pagination and client-side grouping when the API doesn't support server-side grouping.
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <p className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Potter DB — Grouping with Load All</p>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-3">
+            Demonstrates server pagination vs. client-side grouping. The API doesn't support server-side grouping — load all characters to enable it.
           </p>
 
           {!loadedAll && !groupingEnabled && (
-            <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-md">
-              <p className="font-ui text-sm text-amber-900 mb-2">
-                <strong>⚠️ Limitation:</strong> Potter DB API doesn't support server-side grouping or filtering.
-                To enable grouping, we need to load all {totalCount || '250+'} characters into memory.
+            <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <p className="text-[13px] text-amber-900 mb-2">
+                <strong>API limitation:</strong> Grouping requires loading all characters into memory.
               </p>
               <button
-                onClick={handleLoadAllForGrouping}
+                onClick={fetchAllCharacters}
                 disabled={isLoadingAll}
-                className="px-4 py-2 bg-copper text-white rounded-md hover:bg-copper-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-ui text-sm font-medium"
+                className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-[13px] font-medium"
               >
-                {isLoadingAll ? '⏳ Loading all characters...' : `📥 Load all ${totalCount || '250+'} characters to enable grouping`}
+                {isLoadingAll ? 'Loading all characters...' : `Load all ${totalCount || '5000+'} characters for grouping`}
               </button>
             </div>
           )}
 
           {groupingEnabled && (
-            <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-md flex items-center justify-between">
-              <p className="font-ui text-sm text-green-900">
-                ✓ All {allCharacters.length} characters loaded. Grouping, filtering, and sorting now work client-side!
+            <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between">
+              <p className="text-[13px] text-green-900">
+                ✓ {allCharacters.length} characters loaded. Grouping enabled client-side.
               </p>
               <button
-                onClick={handleDisableGrouping}
-                className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-ui text-xs font-medium"
+                onClick={() => { setGroupingEnabled(false); setPageIndex(0); loadPage(0, pageSize); }}
+                className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-[12px] font-medium"
               >
-                Switch back to pagination
+                Back to pagination
               </button>
             </div>
           )}
-
-          <div className="font-ui text-xs text-gray-500 space-y-1">
-            {groupingEnabled ? (
-              <>
-                <p>• Viewing all {allCharacters.length} characters (loaded in memory)</p>
-                <p>• Client-side grouping, filtering, and sorting enabled</p>
-                <p>• No pagination needed - virtualization handles performance</p>
-              </>
-            ) : (
-              <>
-                <p>• Server-side pagination: fetching {pageSize} characters per page</p>
-                <p>• Currently on page {pageIndex + 1}</p>
-                <p>• Grouping disabled (API limitation)</p>
-                {isLoading && <p className="text-copper font-semibold">⏳ Loading...</p>}
-              </>
-            )}
-          </div>
         </div>
 
         <div style={{ height: '600px' }}>
@@ -420,7 +310,7 @@ export const PotterDBWithGrouping: Story = {
             gridId="potter-db-grouping"
             columns={characterColumns}
             data={displayData}
-            getRowId={(row) => row.slug}
+            getRowId={(row) => row.id}
             isLoading={groupingEnabled ? isLoadingAll : isLoading}
             loadingMessage="Fetching magical data from Potter DB..."
             emptyMessage="No characters found"
@@ -429,13 +319,8 @@ export const PotterDBWithGrouping: Story = {
               pageSize,
               totalRows: totalCount,
               manualPagination: true,
-              onPageChange: handlePageChange,
-              onPageSizeChange: (newSize) => {
-                setPageSize(newSize);
-                setPageIndex(0);
-                setCursors([undefined]);
-                loadPage(0);
-              },
+              onPageChange: (newPage) => { setPageIndex(newPage); loadPage(newPage, pageSize); },
+              onPageSizeChange: (newSize) => { setPageSize(newSize); setPageIndex(0); loadPage(0, newSize); },
               pageSizeOptions: [10, 20, 50],
             }}
             enableSorting
@@ -453,93 +338,51 @@ export const PotterDBInfiniteScroll: Story = {
     const [characters, setCharacters] = useState<Character[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const [nextCursor, setNextCursor] = useState<string | undefined>(undefined);
-    const [isFetching, setIsFetching] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
     const [totalCount, setTotalCount] = useState<number | undefined>(undefined);
-    const [batchSize, setBatchSize] = useState(50);
+    const pageSize = 50;
 
-    const loadMore = useCallback(async () => {
-      if (!hasMore || isFetching) return;
-
-      setIsFetching(true);
+    const loadMore = useCallback(async (page: number) => {
+      if (isLoading) return;
       setIsLoading(true);
-
       try {
-        const response = await fetchCharacters(batchSize, nextCursor);
-        const edges = response.data.characters.edges;
-        const newCharacters = edges.map(edge => edge.node);
-
-        setCharacters(prev => [...prev, ...newCharacters]);
-        setNextCursor(response.data.characters.pageInfo.endCursor ?? undefined);
-        setHasMore(response.data.characters.pageInfo.hasNextPage);
-
-        // Store total count
-        if (response.data.characters.totalCount && !totalCount) {
-          setTotalCount(response.data.characters.totalCount);
-        }
+        const result = await fetchCharacters(page + 1, pageSize);
+        setCharacters(prev => page === 0 ? result.characters : [...prev, ...result.characters]);
+        setTotalCount(result.totalCount);
+        setHasMore(page + 1 < result.lastPage);
+        setCurrentPage(page);
       } catch (error) {
-        console.error("Failed to fetch characters:", error);
+        console.error('Failed to fetch characters:', error);
       } finally {
         setIsLoading(false);
-        setIsFetching(false);
       }
-    }, [hasMore, nextCursor, isFetching, totalCount, batchSize]);
+    }, [isLoading]);
 
-    // Load initial data and reload when batch size changes
-    useEffect(() => {
-      loadMore();
-    }, [batchSize]);
+    useEffect(() => { loadMore(0); }, []);
 
-    // Handle scroll to load more
     const handleScroll = useCallback(({ scrollPercentage }: { scrollPercentage: number }) => {
-      // Load more when scrolled 80% down
       if (scrollPercentage > 0.8 && hasMore && !isLoading) {
-        loadMore();
+        loadMore(currentPage + 1);
       }
-    }, [hasMore, isLoading, loadMore]);
+    }, [hasMore, isLoading, currentPage, loadMore]);
 
     return (
       <div>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">🪄 Potter DB - Infinite Scroll</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
-            Real-time data from the Potter DB GraphQL API with virtualized infinite scrolling.
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <p className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Potter DB — Infinite Scroll</p>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
+            Virtualized infinite scroll. Fetches {pageSize} characters per batch as you scroll down.
+            {totalCount && ` ${characters.length.toLocaleString()} / ${totalCount.toLocaleString()} loaded.`}
+            {!hasMore && characters.length > 0 && <span className="text-green-600 ml-1">All characters loaded!</span>}
           </p>
-          <div className="font-ui text-xs text-gray-500 space-y-1 mb-3">
-            <p>• Characters loaded: {characters.length}{totalCount ? ` / ${totalCount}` : ''}</p>
-            <p>• Automatically fetches more data as you scroll</p>
-            <p>• Virtualized rendering for smooth performance</p>
-            <p>• No pagination controls needed!</p>
-            {isLoading && <p className="text-copper font-semibold">⏳ Loading more...</p>}
-            {!hasMore && characters.length > 0 && <p className="text-green-600 font-semibold">✓ All {totalCount} characters loaded!</p>}
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="font-ui text-sm font-medium text-charcoal">Batch Size:</label>
-            <select
-              value={batchSize}
-              onChange={(e) => {
-                const newSize = Number(e.target.value);
-                setBatchSize(newSize);
-                // Reset and reload with new batch size
-                setCharacters([]);
-                setNextCursor(undefined);
-                setHasMore(true);
-                setTotalCount(undefined);
-              }}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm font-ui"
-            >
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-            </select>
-          </div>
         </div>
         <div style={{ height: '600px' }}>
           <DataGrid
             gridId="potter-db-infinite"
             columns={characterColumns}
             data={characters}
-            getRowId={(row) => row.slug}
+            getRowId={(row) => row.id}
+            isLoading={isLoading && characters.length === 0}
             emptyMessage="No characters found"
             virtualizationThreshold={20}
             enableSorting

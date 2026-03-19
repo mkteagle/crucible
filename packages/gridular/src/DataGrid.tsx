@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ArrowUp, ArrowDown, ChevronDown, ChevronRight, X, Filter, Search, MoreVertical, EyeOff } from 'lucide-react';
@@ -55,14 +55,14 @@ function MenuItemRenderer({ item, columnId, onColumnAction, classes }: MenuItemR
     return (
       <>
         {item.separator && (
-          <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-copper/30 to-transparent my-1" />
+          <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-indigo-300/30 to-transparent my-1" />
         )}
         <DropdownMenu.Sub>
           <DropdownMenu.SubTrigger
             className={cn(
               'flex items-center justify-between gap-2 px-2.5 py-1.5 rounded',
-              'text-xs font-medium text-charcoal cursor-pointer outline-none',
-              'hover:bg-copper/10 focus:bg-copper/10 transition-colors',
+              'text-xs font-medium text-gray-800 cursor-pointer outline-none',
+              'hover:bg-indigo-50 focus:bg-indigo-50 transition-colors',
               item.disabled && 'opacity-50 cursor-not-allowed',
               item.danger && 'text-red-600',
               item.className,
@@ -76,19 +76,19 @@ function MenuItemRenderer({ item, columnId, onColumnAction, classes }: MenuItemR
             </div>
             <div className="flex items-center gap-1.5">
               {item.shortcut && (
-                <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-charcoal/5 rounded border border-charcoal/10">
+                <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-gray-100 rounded border border-black/[0.07]">
                   {item.shortcut}
                 </kbd>
               )}
-              <ChevronRight className="w-3 h-3 text-charcoal/40" />
+              <ChevronRight className="w-3 h-3 text-gray-400" />
             </div>
           </DropdownMenu.SubTrigger>
           <DropdownMenu.Portal>
             <DropdownMenu.SubContent
               className={cn(
                 'z-50 min-w-[180px] rounded-lg',
-                'bg-gradient-to-br from-ivory via-ivory to-ivory-dark',
-                'border-2 border-copper shadow-xl shadow-copper/20',
+                'bg-gradient-to-br from-white via-white to-gray-50',
+                'border border-black/[0.1] shadow-xl shadow-black/[0.08]',
                 'animate-in fade-in-0 zoom-in-95 slide-in-from-left-1',
                 'p-1',
                 classes?.columnMenu
@@ -115,7 +115,7 @@ function MenuItemRenderer({ item, columnId, onColumnAction, classes }: MenuItemR
   return (
     <>
       {item.separator && (
-        <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-copper/30 to-transparent my-1" />
+        <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-indigo-300/30 to-transparent my-1" />
       )}
       <DropdownMenu.Item
         className={cn(
@@ -125,7 +125,7 @@ function MenuItemRenderer({ item, columnId, onColumnAction, classes }: MenuItemR
           item.disabled && 'opacity-50 cursor-not-allowed',
           item.danger
             ? 'text-red-600 hover:bg-red-50 focus:bg-red-50'
-            : 'text-charcoal hover:bg-copper/10 focus:bg-copper/10',
+            : 'text-gray-900 hover:bg-indigo-50 focus:bg-indigo-50',
           item.className,
           classes?.columnMenuItem
         )}
@@ -142,7 +142,7 @@ function MenuItemRenderer({ item, columnId, onColumnAction, classes }: MenuItemR
           <span>{item.label}</span>
         </div>
         {item.shortcut && (
-          <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-charcoal/5 rounded border border-charcoal/10">
+          <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-gray-100 rounded border border-black/[0.07]">
             {item.shortcut}
           </kbd>
         )}
@@ -162,6 +162,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
 
   // Virtualization
   rowHeight = 72,
+  groupRowHeight = 44,
   overscan = 5,
 
   // Sorting
@@ -652,24 +653,13 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
   }, [columnWidths, containerWidth, columns.length]);
 
   const totalWidth = useMemo(() => {
-    if (containerWidth > 0) {
-      // Check if any columns have custom widths
-      const hasCustomWidths = columns.some(col => columnWidths[col.id] || col.width);
-      if (hasCustomWidths) {
-        return columns.reduce((acc, col) => {
-          if (columnWidths[col.id]) return acc + columnWidths[col.id];
-          if (col.width) return acc + col.width;
-          return acc + (containerWidth / columns.length);
-        }, 0);
-      }
-      // Otherwise use full container width
-      return containerWidth;
-    }
-    return columns.reduce((acc, col) => {
+    const columnsSum = columns.reduce((acc, col) => {
       if (columnWidths[col.id]) return acc + columnWidths[col.id];
       if (col.width) return acc + col.width;
-      return acc + 150;
+      return acc + (containerWidth > 0 ? containerWidth / columns.length : 150);
     }, 0);
+    // Always fill container width — expand to container if columns are narrower
+    return containerWidth > 0 ? Math.max(columnsSum, containerWidth) : columnsSum;
   }, [columns, columnWidths, containerWidth]);
 
   // Sort handler
@@ -697,9 +687,9 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
 
     if (sortIconVariant === 'arrows') {
       return direction === 'asc' ? (
-        <ArrowUp className="w-3 h-3 text-copper" />
+        <ArrowUp className="w-3 h-3 text-indigo-500" />
       ) : (
-        <ArrowDown className="w-3 h-3 text-copper" />
+        <ArrowDown className="w-3 h-3 text-indigo-500" />
       );
     }
 
@@ -767,7 +757,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                   return (
                     <div
                       key={columnId}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-copper/20 to-copper/10 rounded-full border border-copper/30 text-xs font-semibold text-charcoal shadow-sm backdrop-blur-sm"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-100 to-indigo-50 rounded-full border border-indigo-200 text-xs font-semibold text-gray-900 shadow-sm backdrop-blur-sm"
                     >
                       <span>{column.header}</span>
                       <button
@@ -835,7 +825,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                 'virtualized-grid-header-cell',
                 classes?.headerCell,
                 column.headerClassName,
-                dragOverColumn === column.id && 'bg-copper/10',
+                dragOverColumn === column.id && "bg-indigo-50",
                 enableColumnReorder && 'cursor-move'
               )}
               style={{
@@ -863,7 +853,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                     <div
                       className={cn(
                         'absolute right-0 top-0 bottom-0 w-2 cursor-col-resize',
-                        'hover:border-r-2 hover:border-copper transition-all',
+                        'hover:border-r-2 hover:border-indigo-300 transition-all',
                         'group',
                         classes?.resizeHandle
                       )}
@@ -922,8 +912,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                         className={cn(
                           'relative p-1 rounded transition-all duration-200',
                           'hover:bg-white/15 active:scale-95',
-                          'focus:outline-none focus-visible:ring-1 focus-visible:ring-ivory/50',
-                          isFiltered ? 'text-copper' : 'text-ivory',
+                          'focus:outline-none focus-visible:ring-1 focus-visible:ring-gray-200',
+                          isFiltered ? "text-indigo-500" : "text-gray-400",
                           classes?.filterIcon
                         )}
                         title={isFiltered ? 'Filter active' : 'Filter'}
@@ -932,12 +922,12 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                           className={cn(
                             'w-3 h-3 transition-all duration-200',
                             isFiltered
-                              ? 'fill-copper drop-shadow-[0_0_4px_rgba(184,115,51,0.6)]'
+                              ? 'fill-indigo-500'
                               : 'text-ivory/90 hover:text-ivory'
                           )}
                         />
                         {isFiltered && (
-                          <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-copper rounded-full border border-ivory/30 animate-pulse" />
+                          <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-indigo-500 rounded-full border border-white/30 " />
                         )}
                       </button>
                     </Popover.Trigger>
@@ -946,8 +936,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                       <Popover.Content
                         className={cn(
                           'z-50 w-60 rounded-lg',
-                          'bg-gradient-to-br from-ivory via-ivory to-ivory-dark',
-                          'border-2 border-copper shadow-xl shadow-copper/20',
+                          'bg-gradient-to-br from-white via-white to-gray-50',
+                          'border border-black/[0.1] shadow-xl shadow-black/[0.08]',
                           'animate-in fade-in-0 zoom-in-95',
                           classes?.filterMenu
                         )}
@@ -977,15 +967,15 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                             {/* Compact Header */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5">
-                                <Search className="w-3 h-3 text-copper" />
-                                <span className="text-[10px] font-bold text-charcoal/70 uppercase tracking-wide">
+                                <Search className="w-3 h-3 text-indigo-500" />
+                                <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">
                                   Filter {column.header}
                                 </span>
                               </div>
                               <Popover.Close
-                                className="p-0.5 rounded hover:bg-copper/10 transition-colors"
+                                className="p-0.5 rounded hover:bg-indigo-50 transition-colors"
                               >
-                                <X className="w-3 h-3 text-charcoal/60" />
+                                <X className="w-3 h-3 text-gray-500" />
                               </Popover.Close>
                             </div>
 
@@ -1009,9 +999,9 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                               placeholder="Type to filter..."
                               className={cn(
                                 'w-full px-2 py-1.5 text-xs',
-                                'bg-white border border-copper/20 rounded',
-                                'text-charcoal placeholder:text-charcoal/40',
-                                'focus:outline-none focus:border-copper focus:ring-2 focus:ring-copper/10',
+                                'bg-white border border-black/[0.1] rounded',
+                                'text-gray-900 placeholder:text-gray-400',
+                                'focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10',
                                 'transition-all',
                                 classes?.filterMenuInput
                               )}
@@ -1024,8 +1014,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                 onClick={() => handleApplyFilter(column.id)}
                                 className={cn(
                                   'flex-1 px-2 py-1.5 rounded text-[11px] font-bold',
-                                  'bg-gradient-to-r from-copper to-copper-dark text-white',
-                                  'shadow-sm shadow-copper/30 hover:shadow-md',
+                                  'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white',
+                                  'shadow-sm shadow-indigo-500/20 hover:shadow-md',
                                   'active:scale-[0.98] transition-all'
                                 )}
                               >
@@ -1036,7 +1026,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                   onClick={() => handleClearFilter(column.id)}
                                   className={cn(
                                     'px-2 py-1.5 rounded text-[11px] font-bold',
-                                    'bg-charcoal/5 hover:bg-charcoal/10 text-charcoal/70',
+                                    'bg-charcoal/5 hover:bg-charcoal/10 text-gray-600',
                                     'active:scale-[0.98] transition-all'
                                   )}
                                 >
@@ -1067,7 +1057,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                           className={cn(
                             'p-1 rounded transition-all duration-200',
                             'hover:bg-white/15 active:scale-95',
-                            'focus:outline-none focus-visible:ring-1 focus-visible:ring-ivory/50',
+                            'focus:outline-none focus-visible:ring-1 focus-visible:ring-gray-200',
                             'text-ivory',
                             classes?.columnMenuTrigger
                           )}
@@ -1082,8 +1072,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                       <DropdownMenu.Content
                         className={cn(
                           'z-50 min-w-[180px] rounded-lg',
-                          'bg-gradient-to-br from-ivory via-ivory to-ivory-dark',
-                          'border-2 border-copper shadow-xl shadow-copper/20',
+                          'bg-gradient-to-br from-white via-white to-gray-50',
+                          'border border-black/[0.1] shadow-xl shadow-black/[0.08]',
                           'animate-in fade-in-0 zoom-in-95',
                           'p-1',
                           classes?.columnMenu
@@ -1106,9 +1096,9 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                       <DropdownMenu.SubTrigger
                                         className={cn(
                                           'flex items-center justify-between gap-2 px-2.5 py-1.5 rounded',
-                                          'text-xs font-medium text-charcoal cursor-pointer outline-none',
-                                          'hover:bg-copper/10 focus:bg-copper/10 transition-colors',
-                                          isFiltered && 'text-copper',
+                                          'text-xs font-medium text-gray-800 cursor-pointer outline-none',
+                                          'hover:bg-indigo-50 focus:bg-indigo-50 transition-colors',
+                                          isFiltered && 'text-indigo-500',
                                           classes?.columnMenuItem
                                         )}
                                       >
@@ -1117,16 +1107,16 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                           <span>Filter</span>
                                         </div>
                                         <div className="flex items-center gap-1.5">
-                                          {isFiltered && <span className="w-1.5 h-1.5 bg-copper rounded-full" />}
-                                          <ChevronRight className="w-3 h-3 text-charcoal/40" />
+                                          {isFiltered && <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full" />}
+                                          <ChevronRight className="w-3 h-3 text-gray-400" />
                                         </div>
                                       </DropdownMenu.SubTrigger>
                                       <DropdownMenu.Portal>
                                         <DropdownMenu.SubContent
                                           className={cn(
                                             'z-50 w-60 rounded-lg',
-                                            'bg-gradient-to-br from-ivory via-ivory to-ivory-dark',
-                                            'border-2 border-copper shadow-xl shadow-copper/20',
+                                            'bg-gradient-to-br from-white via-white to-gray-50',
+                                            'border border-black/[0.1] shadow-xl shadow-black/[0.08]',
                                             'animate-in fade-in-0 zoom-in-95 slide-in-from-left-1',
                                             classes?.filterMenu
                                           )}
@@ -1151,8 +1141,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                           ) : (
                                             <div className="p-2.5 space-y-2.5">
                                               <div className="flex items-center gap-1.5">
-                                                <Search className="w-3 h-3 text-copper" />
-                                                <span className="text-[10px] font-bold text-charcoal/70 uppercase tracking-wide">
+                                                <Search className="w-3 h-3 text-indigo-500" />
+                                                <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">
                                                   Filter {column.header}
                                                 </span>
                                               </div>
@@ -1173,9 +1163,9 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                                 placeholder="Type to filter..."
                                                 className={cn(
                                                   'w-full px-2 py-1.5 text-xs',
-                                                  'bg-white border border-copper/20 rounded',
-                                                  'text-charcoal placeholder:text-charcoal/40',
-                                                  'focus:outline-none focus:border-copper focus:ring-2 focus:ring-copper/10',
+                                                  'bg-white border border-black/[0.1] rounded',
+                                                  'text-gray-900 placeholder:text-gray-400',
+                                                  'focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10',
                                                   'transition-all',
                                                   classes?.filterMenuInput
                                                 )}
@@ -1184,14 +1174,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                               <div className={cn('flex gap-1.5', classes?.filterMenuActions)}>
                                                 <button
                                                   onClick={() => handleApplyFilter(column.id)}
-                                                  className="flex-1 px-2 py-1.5 rounded text-[11px] font-bold bg-gradient-to-r from-copper to-copper-dark text-white shadow-sm hover:shadow-md active:scale-[0.98] transition-all"
+                                                  className="flex-1 px-2 py-1.5 rounded text-[11px] font-bold bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-sm hover:shadow-md active:scale-[0.98] transition-all"
                                                 >
                                                   Apply
                                                 </button>
                                                 {isFiltered && (
                                                   <button
                                                     onClick={() => handleClearFilter(column.id)}
-                                                    className="px-2 py-1.5 rounded text-[11px] font-bold bg-charcoal/5 hover:bg-charcoal/10 text-charcoal/70 active:scale-[0.98] transition-all"
+                                                    className="px-2 py-1.5 rounded text-[11px] font-bold bg-charcoal/5 hover:bg-charcoal/10 text-gray-600 active:scale-[0.98] transition-all"
                                                   >
                                                     Clear
                                                   </button>
@@ -1207,8 +1197,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                     <DropdownMenu.Item
                                       className={cn(
                                         'flex items-center gap-2 px-2.5 py-1.5 rounded',
-                                        'text-xs font-medium text-charcoal cursor-pointer outline-none',
-                                        'hover:bg-copper/10 focus:bg-copper/10 transition-colors',
+                                        'text-xs font-medium text-gray-800 cursor-pointer outline-none',
+                                        'hover:bg-indigo-50 focus:bg-indigo-50 transition-colors',
                                         classes?.columnMenuItem
                                       )}
                                       onSelect={() => {
@@ -1216,7 +1206,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                         onColumnAction?.('hide', column.id);
                                       }}
                                     >
-                                      <EyeOff className="w-3 h-3 text-charcoal/60" />
+                                      <EyeOff className="w-3 h-3 text-gray-500" />
                                       <span>Hide Column</span>
                                     </DropdownMenu.Item>
                                   ),
@@ -1232,9 +1222,9 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                     <DropdownMenu.SubTrigger
                                       className={cn(
                                         'flex items-center justify-between gap-2 px-2.5 py-1.5 rounded',
-                                        'text-xs font-medium text-charcoal cursor-pointer outline-none',
-                                        'hover:bg-copper/10 focus:bg-copper/10 transition-colors',
-                                        isFiltered && 'text-copper',
+                                        'text-xs font-medium text-gray-800 cursor-pointer outline-none',
+                                        'hover:bg-indigo-50 focus:bg-indigo-50 transition-colors',
+                                        isFiltered && 'text-indigo-500',
                                         classes?.columnMenuItem
                                       )}
                                     >
@@ -1243,16 +1233,16 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                         <span>Filter</span>
                                       </div>
                                       <div className="flex items-center gap-1.5">
-                                        {isFiltered && <span className="w-1.5 h-1.5 bg-copper rounded-full" />}
-                                        <ChevronRight className="w-3 h-3 text-charcoal/40" />
+                                        {isFiltered && <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full" />}
+                                        <ChevronRight className="w-3 h-3 text-gray-400" />
                                       </div>
                                     </DropdownMenu.SubTrigger>
                                     <DropdownMenu.Portal>
                                       <DropdownMenu.SubContent
                                         className={cn(
                                           'z-50 w-60 rounded-lg',
-                                          'bg-gradient-to-br from-ivory via-ivory to-ivory-dark',
-                                          'border-2 border-copper shadow-xl shadow-copper/20',
+                                          'bg-gradient-to-br from-white via-white to-gray-50',
+                                          'border border-black/[0.1] shadow-xl shadow-black/[0.08]',
                                           'animate-in fade-in-0 zoom-in-95 slide-in-from-left-1',
                                           classes?.filterMenu
                                         )}
@@ -1277,8 +1267,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                         ) : (
                                           <div className="p-2.5 space-y-2.5">
                                             <div className="flex items-center gap-1.5">
-                                              <Search className="w-3 h-3 text-copper" />
-                                              <span className="text-[10px] font-bold text-charcoal/70 uppercase tracking-wide">
+                                              <Search className="w-3 h-3 text-indigo-500" />
+                                              <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">
                                                 Filter {column.header}
                                               </span>
                                             </div>
@@ -1299,9 +1289,9 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                               placeholder="Type to filter..."
                                               className={cn(
                                                 'w-full px-2 py-1.5 text-xs',
-                                                'bg-white border border-copper/20 rounded',
-                                                'text-charcoal placeholder:text-charcoal/40',
-                                                'focus:outline-none focus:border-copper focus:ring-2 focus:ring-copper/10',
+                                                'bg-white border border-black/[0.1] rounded',
+                                                'text-gray-900 placeholder:text-gray-400',
+                                                'focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10',
                                                 'transition-all',
                                                 classes?.filterMenuInput
                                               )}
@@ -1310,14 +1300,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                             <div className={cn('flex gap-1.5', classes?.filterMenuActions)}>
                                               <button
                                                 onClick={() => handleApplyFilter(column.id)}
-                                                className="flex-1 px-2 py-1.5 rounded text-[11px] font-bold bg-gradient-to-r from-copper to-copper-dark text-white shadow-sm hover:shadow-md active:scale-[0.98] transition-all"
+                                                className="flex-1 px-2 py-1.5 rounded text-[11px] font-bold bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-sm hover:shadow-md active:scale-[0.98] transition-all"
                                               >
                                                 Apply
                                               </button>
                                               {isFiltered && (
                                                 <button
                                                   onClick={() => handleClearFilter(column.id)}
-                                                  className="px-2 py-1.5 rounded text-[11px] font-bold bg-charcoal/5 hover:bg-charcoal/10 text-charcoal/70 active:scale-[0.98] transition-all"
+                                                  className="px-2 py-1.5 rounded text-[11px] font-bold bg-charcoal/5 hover:bg-charcoal/10 text-gray-600 active:scale-[0.98] transition-all"
                                                 >
                                                   Clear
                                                 </button>
@@ -1333,8 +1323,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                   <DropdownMenu.Item
                                     className={cn(
                                       'flex items-center gap-2 px-2.5 py-1.5 rounded',
-                                      'text-xs font-medium text-charcoal cursor-pointer outline-none',
-                                      'hover:bg-copper/10 focus:bg-copper/10 transition-colors',
+                                      'text-xs font-medium text-gray-800 cursor-pointer outline-none',
+                                      'hover:bg-indigo-50 focus:bg-indigo-50 transition-colors',
                                       classes?.columnMenuItem
                                     )}
                                     onSelect={() => {
@@ -1342,7 +1332,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                       onColumnAction?.('hide', column.id);
                                     }}
                                   >
-                                    <EyeOff className="w-3 h-3 text-charcoal/60" />
+                                    <EyeOff className="w-3 h-3 text-gray-500" />
                                     <span>Hide Column</span>
                                   </DropdownMenu.Item>
                                 ),
@@ -1358,9 +1348,9 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                 <DropdownMenu.SubTrigger
                                   className={cn(
                                     'flex items-center justify-between gap-2 px-2.5 py-1.5 rounded',
-                                    'text-xs font-medium text-charcoal cursor-pointer outline-none',
-                                    'hover:bg-copper/10 focus:bg-copper/10 transition-colors',
-                                    isFiltered && 'text-copper',
+                                    'text-xs font-medium text-gray-800 cursor-pointer outline-none',
+                                    'hover:bg-indigo-50 focus:bg-indigo-50 transition-colors',
+                                    isFiltered && 'text-indigo-500',
                                     classes?.columnMenuItem
                                   )}
                                 >
@@ -1369,16 +1359,16 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                     <span>Filter</span>
                                   </div>
                                   <div className="flex items-center gap-1.5">
-                                    {isFiltered && <span className="w-1.5 h-1.5 bg-copper rounded-full" />}
-                                    <ChevronRight className="w-3 h-3 text-charcoal/40" />
+                                    {isFiltered && <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full" />}
+                                    <ChevronRight className="w-3 h-3 text-gray-400" />
                                   </div>
                                 </DropdownMenu.SubTrigger>
                                 <DropdownMenu.Portal>
                                   <DropdownMenu.SubContent
                                     className={cn(
                                       'z-50 w-60 rounded-lg',
-                                      'bg-gradient-to-br from-ivory via-ivory to-ivory-dark',
-                                      'border-2 border-copper shadow-xl shadow-copper/20',
+                                      'bg-gradient-to-br from-white via-white to-gray-50',
+                                      'border border-black/[0.1] shadow-xl shadow-black/[0.08]',
                                       'animate-in fade-in-0 zoom-in-95 slide-in-from-left-1',
                                       classes?.filterMenu
                                     )}
@@ -1403,8 +1393,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                     ) : (
                                       <div className="p-2.5 space-y-2.5">
                                         <div className="flex items-center gap-1.5">
-                                          <Search className="w-3 h-3 text-copper" />
-                                          <span className="text-[10px] font-bold text-charcoal/70 uppercase tracking-wide">
+                                          <Search className="w-3 h-3 text-indigo-500" />
+                                          <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">
                                             Filter {column.header}
                                           </span>
                                         </div>
@@ -1425,9 +1415,9 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                           placeholder="Type to filter..."
                                           className={cn(
                                             'w-full px-2 py-1.5 text-xs',
-                                            'bg-white border border-copper/20 rounded',
-                                            'text-charcoal placeholder:text-charcoal/40',
-                                            'focus:outline-none focus:border-copper focus:ring-2 focus:ring-copper/10',
+                                            'bg-white border border-black/[0.1] rounded',
+                                            'text-gray-900 placeholder:text-gray-400',
+                                            'focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10',
                                             'transition-all',
                                             classes?.filterMenuInput
                                           )}
@@ -1436,14 +1426,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                         <div className={cn('flex gap-1.5', classes?.filterMenuActions)}>
                                           <button
                                             onClick={() => handleApplyFilter(column.id)}
-                                            className="flex-1 px-2 py-1.5 rounded text-[11px] font-bold bg-gradient-to-r from-copper to-copper-dark text-white shadow-sm hover:shadow-md active:scale-[0.98] transition-all"
+                                            className="flex-1 px-2 py-1.5 rounded text-[11px] font-bold bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-sm hover:shadow-md active:scale-[0.98] transition-all"
                                           >
                                             Apply
                                           </button>
                                           {isFiltered && (
                                             <button
                                               onClick={() => handleClearFilter(column.id)}
-                                              className="px-2 py-1.5 rounded text-[11px] font-bold bg-charcoal/5 hover:bg-charcoal/10 text-charcoal/70 active:scale-[0.98] transition-all"
+                                              className="px-2 py-1.5 rounded text-[11px] font-bold bg-charcoal/5 hover:bg-charcoal/10 text-gray-600 active:scale-[0.98] transition-all"
                                             >
                                               Clear
                                             </button>
@@ -1457,14 +1447,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                             )}
 
                             {/* Separator */}
-                            {enableFiltering && columnFilteringEnabled && <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-copper/30 to-transparent my-1" />}
+                            {enableFiltering && columnFilteringEnabled && <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-indigo-300/30 to-transparent my-1" />}
 
                             {/* Hide Column */}
                             <DropdownMenu.Item
                               className={cn(
                                 'flex items-center gap-2 px-2.5 py-1.5 rounded',
-                                'text-xs font-medium text-charcoal cursor-pointer outline-none',
-                                'hover:bg-copper/10 focus:bg-copper/10 transition-colors',
+                                'text-xs font-medium text-gray-800 cursor-pointer outline-none',
+                                'hover:bg-indigo-50 focus:bg-indigo-50 transition-colors',
                                 classes?.columnMenuItem
                               )}
                               onSelect={() => {
@@ -1472,14 +1462,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                 onColumnAction?.('hide', column.id);
                               }}
                             >
-                              <EyeOff className="w-3 h-3 text-charcoal/60" />
+                              <EyeOff className="w-3 h-3 text-gray-500" />
                               <span>Hide Column</span>
                             </DropdownMenu.Item>
 
                             {/* Custom Column Menu Items */}
                             {column.columnMenuItems && column.columnMenuItems.length > 0 && (
                               <>
-                                <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-copper/30 to-transparent my-1" />
+                                <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-indigo-300/30 to-transparent my-1" />
                                 {column.columnMenuItems.map((item) => (
                                   <MenuItemRenderer
                                     key={item.id}
@@ -1495,7 +1485,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                             {/* Default Column Menu Items */}
                             {defaultColumnMenuItems && defaultColumnMenuItems.length > 0 && (
                               <>
-                                <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-copper/30 to-transparent my-1" />
+                                <DropdownMenu.Separator className="h-px bg-gradient-to-r from-transparent via-indigo-300/30 to-transparent my-1" />
                                 {defaultColumnMenuItems.map((item) => (
                                   <MenuItemRenderer
                                     key={item.id}
@@ -1521,7 +1511,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                 <div
                 className={cn(
                   'absolute right-0 top-0 bottom-0 w-2 cursor-col-resize',
-                  'hover:border-r-2 hover:border-copper transition-all',
+                  'hover:border-r-2 hover:border-indigo-300 transition-all',
                   'group',
                   classes?.resizeHandle
                 )}
@@ -1561,6 +1551,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
           data={processedData}
           columns={columns}
           rowHeight={rowHeight}
+          groupRowHeight={groupRowHeight}
           overscan={overscan}
           totalWidth={totalWidth}
           getColumnWidth={getColumnWidth}
@@ -1591,6 +1582,7 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
         <StandardBody
           data={processedData}
           columns={columns}
+          groupRowHeight={groupRowHeight}
           totalWidth={totalWidth}
           getColumnWidth={getColumnWidth}
           selectedRows={selectedRows}
@@ -1660,6 +1652,7 @@ function VirtualizedBody<T extends Record<string, any>>({
   data,
   columns,
   rowHeight,
+  groupRowHeight,
   overscan,
   totalWidth,
   getColumnWidth,
@@ -1693,6 +1686,9 @@ function VirtualizedBody<T extends Record<string, any>>({
     getScrollElement: () => parentRef.current,
     estimateSize: (index) => {
       const item = data[index];
+      if (enableGrouping && (item as any).isGroupRow) {
+        return groupRowHeight ?? 44;
+      }
       const rowId = getRowId(item, index);
       // If this row is expanded, estimate a larger size
       if (enableExpandableRows && expandedRows[rowId] && renderExpandedRow) {
@@ -1868,7 +1864,7 @@ function VirtualizedBody<T extends Record<string, any>>({
                         'virtualized-grid-cell',
                         classes?.cell,
                         column.cellClassName,
-                        isCellSelected && 'ring-2 ring-copper ring-inset',
+                        isCellSelected && 'ring-2 ring-indigo-500 ring-inset',
                         isCellSelected && classes?.selectedCell
                       )}
                       style={{
@@ -1941,6 +1937,7 @@ function VirtualizedBody<T extends Record<string, any>>({
 function StandardBody<T extends Record<string, any>>({
   data,
   columns,
+  groupRowHeight,
   totalWidth,
   getColumnWidth,
   selectedRows,
@@ -1982,6 +1979,7 @@ function StandardBody<T extends Record<string, any>>({
               )}
               style={{
                 ...tssToInlineStyles(classes?.rowStyle),
+                minHeight: `${groupRowHeight ?? 44}px`,
                 paddingLeft: `${groupRow.depth * 24}px`,
               }}
               onClick={() => onToggleGroupExpand(groupRow.groupKey)}
@@ -2046,9 +2044,8 @@ function StandardBody<T extends Record<string, any>>({
         }
 
         return (
-          <>
+          <React.Fragment key={rowId}>
             <div
-              key={rowId}
               className={cn(
                 'virtualized-grid-row',
                 onRowClick && 'clickable',
@@ -2076,7 +2073,7 @@ function StandardBody<T extends Record<string, any>>({
                       'virtualized-grid-cell',
                       classes?.cell,
                       column.cellClassName,
-                      isCellSelected && 'ring-2 ring-copper ring-inset',
+                      isCellSelected && 'ring-2 ring-indigo-500 ring-inset',
                       isCellSelected && classes?.selectedCell
                     )}
                     style={{
@@ -2137,7 +2134,7 @@ function StandardBody<T extends Record<string, any>>({
 
             {/* Expanded row content - render function has full control */}
             {enableExpandableRows && isExpanded && renderExpandedRow && renderExpandedRow(item as T)}
-          </>
+          </React.Fragment>
         );
       })}
     </div>

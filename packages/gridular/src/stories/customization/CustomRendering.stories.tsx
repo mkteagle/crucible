@@ -26,7 +26,7 @@ const meta: Meta<typeof DataGrid> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ padding: '2rem', background: 'linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%)', minHeight: '100vh' }}>
+      <div style={{ padding: '2rem', background: '#f5f5f5', minHeight: '100vh' }}>
         <Story />
       </div>
     ),
@@ -106,9 +106,9 @@ export const CustomCells: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Custom Cell Rendering</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Custom Cell Rendering</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Customize how individual cells are rendered with badges, progress bars, and custom styling.
           </p>
         </div>
@@ -166,9 +166,9 @@ export const CustomHeaders: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Custom Header Styling</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Custom Header Styling</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Apply custom classes to column headers for unique styling.
           </p>
         </div>
@@ -197,9 +197,9 @@ export const CustomHeaderCellRendering: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Custom Header Cell Rendering</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Custom Header Cell Rendering</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Use <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">renderHeaderCell</code> to completely customize header appearance with icons, badges, and custom layouts.
           </p>
         </div>
@@ -271,9 +271,9 @@ export const MinimalHeaderDesign: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Minimal Header Design</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Minimal Header Design</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Clean, minimalist header design with subtle styling and no uppercase text.
           </p>
         </div>
@@ -315,9 +315,9 @@ export const ColorfulHeaderBadges: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Colorful Header Badges</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Colorful Header Badges</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Each column header gets a unique color badge for visual distinction.
           </p>
         </div>
@@ -393,9 +393,9 @@ export const HeadersWithTooltips: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Headers with Info Icons</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Headers with Info Icons</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Headers include info icons and descriptions. Hover over the ℹ️ to see more details.
           </p>
         </div>
@@ -445,9 +445,9 @@ export const GradientHeaderDesign: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Gradient Header Design</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Gradient Header Design</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Modern gradient design with glassmorphism effect and custom styling.
           </p>
         </div>
@@ -530,9 +530,9 @@ export const CustomRowStyling: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Custom Row Styling</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Custom Row Styling</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Rows are styled based on status: Active (green background), Pending (yellow background), Inactive (gray background).
             Each row has a colored left border matching its status.
           </p>

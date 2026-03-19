@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import type { CSSObject } from 'tss-react';
+import type { CSSProperties } from 'react';
 
 export type SortDirection = 'asc' | 'desc' | null;
 
@@ -19,8 +19,8 @@ export interface ColumnDef<T = any> {
   // Styling - supports both Tailwind and TSS-React
   headerClassName?: string;
   cellClassName?: string;
-  headerStyle?: CSSObject;
-  cellStyle?: CSSObject;
+  headerStyle?: CSSProperties;
+  cellStyle?: CSSProperties;
 
   // Rendering
   renderCell?: (row: T) => ReactNode;
@@ -111,101 +111,101 @@ export interface GroupingState {
 export interface GridClasses {
   // Container
   container?: string;
-  containerStyle?: CSSObject;
+  containerStyle?: CSSProperties;
 
   // Header
   header?: string;
-  headerStyle?: CSSObject;
+  headerStyle?: CSSProperties;
   headerCell?: string;
-  headerCellStyle?: CSSObject;
+  headerCellStyle?: CSSProperties;
 
   // Body & Rows
   body?: string;
-  bodyStyle?: CSSObject;
+  bodyStyle?: CSSProperties;
   row?: string;
-  rowStyle?: CSSObject;
+  rowStyle?: CSSProperties;
   selectedRow?: string;
-  selectedRowStyle?: CSSObject;
+  selectedRowStyle?: CSSProperties;
   hoveredRow?: string;
-  hoveredRowStyle?: CSSObject;
+  hoveredRowStyle?: CSSProperties;
 
   // Cells
   cell?: string;
-  cellStyle?: CSSObject;
+  cellStyle?: CSSProperties;
   selectedCell?: string;
-  selectedCellStyle?: CSSObject;
+  selectedCellStyle?: CSSProperties;
 
   // Expandable Rows
   expandedRow?: string;
-  expandedRowStyle?: CSSObject;
+  expandedRowStyle?: CSSProperties;
 
   // Pagination
   pagination?: string;
-  paginationStyle?: CSSObject;
+  paginationStyle?: CSSProperties;
   paginationButton?: string;
-  paginationButtonStyle?: CSSObject;
+  paginationButtonStyle?: CSSProperties;
   pageInfo?: string;
-  pageInfoStyle?: CSSObject;
+  pageInfoStyle?: CSSProperties;
 
   // States
   emptyState?: string;
-  emptyStateStyle?: CSSObject;
+  emptyStateStyle?: CSSProperties;
   loadingState?: string;
-  loadingStateStyle?: CSSObject;
+  loadingStateStyle?: CSSProperties;
 
   // Controls
   toolbar?: string;
-  toolbarStyle?: CSSObject;
+  toolbarStyle?: CSSProperties;
   columnManager?: string;
-  columnManagerStyle?: CSSObject;
+  columnManagerStyle?: CSSProperties;
   columnManagerTrigger?: string;
-  columnManagerTriggerStyle?: CSSObject;
+  columnManagerTriggerStyle?: CSSProperties;
   columnManagerContent?: string;
-  columnManagerContentStyle?: CSSObject;
+  columnManagerContentStyle?: CSSProperties;
   columnManagerItem?: string;
-  columnManagerItemStyle?: CSSObject;
+  columnManagerItemStyle?: CSSProperties;
   groupManager?: string;
-  groupManagerStyle?: CSSObject;
+  groupManagerStyle?: CSSProperties;
   groupManagerTrigger?: string;
-  groupManagerTriggerStyle?: CSSObject;
+  groupManagerTriggerStyle?: CSSProperties;
   groupManagerContent?: string;
-  groupManagerContentStyle?: CSSObject;
+  groupManagerContentStyle?: CSSProperties;
   groupManagerItem?: string;
-  groupManagerItemStyle?: CSSObject;
+  groupManagerItemStyle?: CSSProperties;
   filterMenu?: string;
-  filterMenuStyle?: CSSObject;
+  filterMenuStyle?: CSSProperties;
   filterMenuHeader?: string;
-  filterMenuHeaderStyle?: CSSObject;
+  filterMenuHeaderStyle?: CSSProperties;
   filterMenuInput?: string;
-  filterMenuInputStyle?: CSSObject;
+  filterMenuInputStyle?: CSSProperties;
   filterMenuActions?: string;
-  filterMenuActionsStyle?: CSSObject;
+  filterMenuActionsStyle?: CSSProperties;
   columnMenu?: string;
-  columnMenuStyle?: CSSObject;
+  columnMenuStyle?: CSSProperties;
   columnMenuTrigger?: string;
-  columnMenuTriggerStyle?: CSSObject;
+  columnMenuTriggerStyle?: CSSProperties;
   columnMenuItem?: string;
-  columnMenuItemStyle?: CSSObject;
+  columnMenuItemStyle?: CSSProperties;
 
   // Resize handle
   resizeHandle?: string;
-  resizeHandleStyle?: CSSObject;
+  resizeHandleStyle?: CSSProperties;
   resizeHandleActive?: string;
-  resizeHandleActiveStyle?: CSSObject;
+  resizeHandleActiveStyle?: CSSProperties;
 
   // Sort & Filter icons
   sortIcon?: string;
-  sortIconStyle?: CSSObject;
+  sortIconStyle?: CSSProperties;
   sortIconActive?: string;
-  sortIconActiveStyle?: CSSObject;
+  sortIconActiveStyle?: CSSProperties;
   filterIcon?: string;
-  filterIconStyle?: CSSObject;
+  filterIconStyle?: CSSProperties;
   filterIconActive?: string;
-  filterIconActiveStyle?: CSSObject;
+  filterIconActiveStyle?: CSSProperties;
 
   // Skeleton loading
   skeleton?: string;
-  skeletonStyle?: CSSObject;
+  skeletonStyle?: CSSProperties;
 }
 
 export interface VirtualizedGridProps<T = any> {
@@ -230,6 +230,7 @@ export interface VirtualizedGridProps<T = any> {
   // Virtualization
   virtualizationThreshold?: number; // Default: 20 (auto-enable virtualization past this many rows)
   rowHeight?: number; // Default: 72
+  groupRowHeight?: number; // Default: 44
   overscan?: number; // Default: 5
 
   // Sorting

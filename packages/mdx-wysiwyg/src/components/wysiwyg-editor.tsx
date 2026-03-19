@@ -120,7 +120,7 @@ export function WysiwygEditor({
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
       const node = range.startContainer;
-      const block = (node instanceof HTMLElement ? node : node.parentElement)?.closest("h2,h3,blockquote");
+      const block = (node instanceof HTMLElement ? node : node.parentElement)?.closest("h1,h2,h3,h4,h5,h6,blockquote");
       if (block) {
         document.execCommand("formatBlock", false, "p");
       }
@@ -131,7 +131,8 @@ export function WysiwygEditor({
 
   const applySlashCommand = useCallback((action: CommandAction) => {
     editorRef.current?.focus();
-    restoreSelection();
+    // Do not call restoreSelection() here — removeTriggerSlash already set the cursor
+    // correctly, and restoreSelection() would undo that by reverting to a stale range.
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
@@ -238,7 +239,7 @@ export function WysiwygEditor({
       if (!selection || selection.rangeCount === 0) return;
       const range = selection.getRangeAt(0);
       const node = range.startContainer;
-      const block = (node instanceof HTMLElement ? node : node.parentElement)?.closest("h2,h3,blockquote");
+      const block = (node instanceof HTMLElement ? node : node.parentElement)?.closest("h1,h2,h3,h4,h5,h6,blockquote");
       if (block) {
         // If the block is empty, convert to paragraph instead of inserting after
         const text = block.textContent || "";

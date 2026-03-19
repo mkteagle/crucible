@@ -9,6 +9,11 @@ export interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement
 const baseStyle: React.CSSProperties = {
   position: "fixed",
   inset: "unset",
+  border: "none",
+  padding: 0,
+  background: "transparent",
+  margin: 0,
+  outline: "none",
 };
 
 function calcCrossAxis(

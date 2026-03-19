@@ -68,7 +68,7 @@ export const Playground: Story = {
     },
   },
   render: ({ placement, align }) => (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
       <div className="flex flex-col items-center gap-3">
         <div className="text-[11px] font-mono text-gray-400 tracking-[0.04em]">
           placement=<span className="text-indigo-500 font-semibold">{placement}</span>
@@ -110,7 +110,7 @@ export const Default: Story = {
     },
   },
   render: () => (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
       <Popover>
         <PopoverTrigger>
           <button className={triggerCls}>
@@ -163,7 +163,7 @@ export const ContextMenu: Story = {
     },
   },
   render: () => (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
       <Popover>
         <PopoverTrigger>
           <button
@@ -219,7 +219,7 @@ export const UserProfile: Story = {
     },
   },
   render: () => (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
       <Popover>
         <PopoverTrigger>
           <button
@@ -311,7 +311,7 @@ export const FilterPanel: Story = {
       "w-full px-2.5 py-[7px] rounded-lg bg-white border border-black/[0.1] text-gray-700 text-[12.5px] cursor-pointer appearance-none font-sans tracking-[-0.01em] transition-[border-color] focus:outline-none focus:border-orange-400";
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans">
         <Popover>
           <PopoverTrigger>
             <button
@@ -448,7 +448,7 @@ export const Placement: Story = {
     layout: "fullscreen",
   },
   render: () => (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans p-16">
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5] font-sans p-16">
       <div className="space-y-6">
         <div className="text-center mb-8">
           <h3 className="text-[13px] font-semibold text-gray-400 uppercase tracking-[0.1em] font-mono mb-2">

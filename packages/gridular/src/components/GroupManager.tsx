@@ -38,7 +38,7 @@ export function GroupManager<T>({
         <DropdownMenu.Trigger asChild>
           <button
             className={cn(
-              "inline-flex items-center px-3 py-1.5 text-sm font-medium text-charcoal bg-ivory border-2 border-copper/40 rounded-md hover:bg-copper/10 hover:border-copper transition-colors shadow-sm",
+              "inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-black/[0.1] rounded-lg hover:bg-gray-50 hover:border-indigo-300 transition-colors shadow-sm",
               classes?.groupManagerTrigger
             )}
             style={tssToInlineStyles(classes?.groupManagerTriggerStyle)}
@@ -53,7 +53,7 @@ export function GroupManager<T>({
             align={align}
             sideOffset={4}
             className={cn(
-              "z-[9999] w-56 rounded-md border-2 border-copper/40 bg-ivory shadow-xl max-h-[80vh] overflow-auto animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
+              "z-[9999] w-56 rounded-md border border-black/[0.08] bg-white shadow-lg max-h-[80vh] overflow-auto animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
               classes?.groupManagerContent
             )}
             style={tssToInlineStyles(classes?.groupManagerContentStyle)}
@@ -69,16 +69,16 @@ export function GroupManager<T>({
                       checked={isGrouped}
                       onCheckedChange={() => toggleColumnGrouping(column.id)}
                       className={cn(
-                        "flex items-center px-3 py-2 text-sm rounded hover:bg-copper/10 cursor-pointer text-charcoal transition-colors outline-none select-none",
+                        "flex items-center px-3 py-2 text-sm rounded hover:bg-gray-50 cursor-pointer text-gray-800 transition-colors outline-none select-none",
                         classes?.groupManagerItem
                       )}
                       style={tssToInlineStyles(classes?.groupManagerItemStyle)}
                     >
                       <span className="flex items-center flex-1">
-                        <span className="mr-2 h-4 w-4 flex items-center justify-center border-2 border-copper/50 rounded">
+                        <span className="mr-2 h-4 w-4 flex items-center justify-center border border-indigo-300 rounded">
                           <DropdownMenu.ItemIndicator>
                             <svg
-                              className="w-3 h-3 text-copper"
+                              className="w-3 h-3 text-indigo-500"
                               fill="none"
                               strokeLinecap="round"
                               strokeLinejoin="round"
@@ -103,10 +103,10 @@ export function GroupManager<T>({
 
               {groupByColumns.length > 0 && (
                 <>
-                  <DropdownMenu.Separator className="my-2 h-0.5 bg-copper/20" />
+                  <DropdownMenu.Separator className="my-2 h-0.5 bg-black/[0.06]" />
                   <DropdownMenu.Item
                     onSelect={() => updateGroupByColumns([])}
-                    className="flex items-center w-full px-3 py-2 text-sm rounded hover:bg-copper/10 cursor-pointer text-charcoal font-medium transition-colors outline-none select-none"
+                    className="flex items-center w-full px-3 py-2 text-sm rounded hover:bg-gray-50 cursor-pointer text-gray-800 font-medium transition-colors outline-none select-none"
                   >
                     Clear all groups
                   </DropdownMenu.Item>

@@ -16,7 +16,7 @@ export default meta;
 const packages = [
   {
     name: "@crucible-ui/gridular",
-    version: "3.3.2",
+    version: "4.0.0",
     description: "High-performance virtualized React data grid with grouping, sorting, filtering, column management, and 100k+ row virtualization",
     status: "stable",
   },

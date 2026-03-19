@@ -33,4 +33,4 @@ export type {
 } from './types';
 
 // Utilities
-export { cn, mergeStyles, tssToInlineStyles, spacing } from './lib/utils';
+export { cn, tssToInlineStyles, spacing } from './lib/utils';

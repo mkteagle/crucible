@@ -2,71 +2,55 @@
 @import "tailwindcss";
 @import './DataGrid.css';
 
-/* Tailwind v4 custom theme */
+/* Crucible UI theme tokens for Tailwind v4 */
 @theme {
-  --color-ivory: #faf8f6;
-  --color-ivory-dark: #f0ede9;
-  --color-charcoal: #1a1a1a;
-  --color-charcoal-light: #2a2a2a;
-  --color-copper: #b87333;
-  --color-copper-light: #d4935a;
-  --color-copper-dark: #9a5e28;
+  --color-grid-bg:          #ffffff;
+  --color-grid-bg-alt:      #f9fafb;
+  --color-grid-bg-hover:    #f3f4f6;
+  --color-grid-text:        #111827;
+  --color-grid-text-muted:  #9ca3af;
+  --color-grid-accent:      #6366f1;
+  --color-grid-border:      rgba(0,0,0,0.07);
+
+  /* Legacy aliases (kept for Themes story backward compat) */
+  --color-charcoal:         #111827;
+  --color-ivory:            #ffffff;
+  --color-ivory-dark:       #f9fafb;
+  --color-copper:           #6366f1;
+  --color-copper-light:     #818cf8;
+  --color-copper-dark:      #4338ca;
 }
 
-/* Custom utility classes */
+/* Utility classes */
 @layer utilities {
-  .bg-ivory {
-    background-color: var(--vg-ivory);
+  .font-ui {
+    font-family: "DM Sans", system-ui, sans-serif;
   }
-  .bg-ivory-dark {
-    background-color: var(--vg-ivory-dark);
-  }
-  .bg-charcoal {
-    background-color: var(--vg-charcoal);
-  }
-  .bg-charcoal-light {
-    background-color: var(--vg-charcoal-light);
-  }
-  .bg-copper {
-    background-color: var(--vg-copper);
-  }
-  .bg-copper-light {
-    background-color: var(--vg-copper-light);
-  }
-  .bg-copper-dark {
-    background-color: var(--vg-copper-dark);
-  }
-
-  .text-ivory {
-    color: var(--vg-ivory);
+  .font-display {
+    font-family: "DM Sans", system-ui, sans-serif;
   }
   .text-charcoal {
-    color: var(--vg-charcoal);
+    color: #111827;
   }
   .text-copper {
-    color: var(--vg-copper);
+    color: #6366f1;
   }
   .text-copper-light {
-    color: var(--vg-copper-light);
+    color: #818cf8;
   }
   .text-copper-dark {
-    color: var(--vg-copper-dark);
+    color: #4338ca;
   }
-
-  .border-vg-border {
-    border-color: var(--vg-border);
+  .bg-ivory {
+    background-color: #ffffff;
+  }
+  .bg-ivory-dark {
+    background-color: #f9fafb;
+  }
+  .bg-copper {
+    background-color: #6366f1;
   }
   .border-copper {
-    border-color: var(--vg-copper);
-  }
-  .border-copper-light {
-    border-color: var(--vg-copper-light);
-  }
-
-  .font-display {
-    font-family: var(--vg-font-display);
-  }
-  .font-ui {
-    font-family: var(--vg-font-ui);
+    border-color: rgba(99,102,241,0.3);
   }
 }

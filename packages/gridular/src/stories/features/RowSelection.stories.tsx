@@ -43,9 +43,9 @@ const meta: Meta<typeof DataGrid> = {
   decorators: [
     (Story) => (
       <div style={{
-        padding: '2rem',
+        padding: '2rem', fontFamily: '"DM Sans", system-ui, sans-serif',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%)',
+        background: '#f5f5f5',
       }}>
         <Story />
       </div>
@@ -77,9 +77,9 @@ export const SingleRowSelection: Story = {
 
     return (
       <div style={{ height: '700px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Single Row Selection</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Single Row Selection</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Click on any row to select it. Selected rows will be highlighted with a copper accent.
           </p>
           <p className="font-ui text-sm text-gray-700 font-semibold">
@@ -244,9 +244,9 @@ export const MultiRowSelection: Story = {
 
     return (
       <div style={{ height: '700px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Multi-Row Selection with Drag</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Multi-Row Selection with Drag</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Click any row to select/deselect it. Hold Shift and click to select a range. Click and drag across rows to toggle selection (exactly like on mobile).
           </p>
           <p className="font-ui text-sm text-gray-700 font-semibold">
@@ -300,9 +300,9 @@ export const MultiRowWithModifier: Story = {
 
     return (
       <div style={{ height: '700px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Multi-Row Selection with Modifier</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Multi-Row Selection with Modifier</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Click to select a single row (replaces previous selection). Hold Cmd (Mac) or Ctrl (Windows) and click to add/remove rows from selection.
           </p>
           <p className="font-ui text-sm text-gray-700 font-semibold">
@@ -348,9 +348,9 @@ export const PreselectedRows: Story = {
 
     return (
       <div style={{ height: '700px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Preselected Rows</h3>
-          <p className="font-ui text-sm text-gray-600 mb-2">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Preselected Rows</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-0">
             Rows can be preselected on initial render. Click rows to toggle selection.
           </p>
           <p className="font-ui text-sm text-gray-700 font-semibold">

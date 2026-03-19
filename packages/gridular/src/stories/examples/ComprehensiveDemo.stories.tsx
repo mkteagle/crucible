@@ -144,9 +144,9 @@ const meta: Meta<typeof DataGrid> = {
   decorators: [
     (Story) => (
       <div style={{
-        padding: '2rem',
+        padding: '2rem', fontFamily: '"DM Sans", system-ui, sans-serif',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%)',
+        background: '#f5f5f5',
       }}>
         <Story />
       </div>
@@ -175,8 +175,8 @@ export const AllFeatures: Story = {
 
     return (
       <div style={{ height: '800px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">🎯 Comprehensive Feature Demo</h3>
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">🎯 Comprehensive Feature Demo</h3>
           <div className="font-ui text-sm text-gray-600 space-y-1">
             <p>✨ <strong>Column Management:</strong> Show/hide columns, reset to defaults</p>
             <p>📊 <strong>Grouping:</strong> Group by Department or Status using the Group Manager</p>

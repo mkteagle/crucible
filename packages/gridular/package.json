@@ -1,6 +1,6 @@
 {
   "name": "@crucible-ui/gridular",
-  "version": "3.3.2",
+  "version": "4.0.0",
   "description": "High-performance virtualized React data grid with grouping, sorting, filtering, and comprehensive customization",
   "type": "module",
   "main": "./dist/gridular.js",
@@ -40,8 +40,7 @@
     "@tanstack/react-virtual": "^3.13.13",
     "clsx": "^2.1.1",
     "lucide-react": "^0.559.0",
-    "tailwind-merge": "^3.4.0",
-    "tss-react": "^4.9.20"
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",

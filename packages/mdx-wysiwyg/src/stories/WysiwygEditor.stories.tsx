@@ -24,7 +24,7 @@ const lightVars = {
 
 function EditorShell({ badge, children }: { badge?: string; children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex items-start justify-center px-6 py-12 bg-gray-100 font-sans">
+    <div className="min-h-screen flex items-start justify-center px-6 py-12 bg-[#f5f5f5] font-sans">
       <div className="w-full max-w-[760px] rounded-xl border border-black/[0.08] bg-white shadow-sm overflow-hidden">
         <div className="px-4 py-2.5 border-b border-black/[0.07] bg-gray-50 flex items-center gap-2">
           <span className="text-[10.5px] uppercase tracking-[0.1em] font-semibold font-mono text-gray-400">

@@ -1,14 +1,8 @@
-<svg width="32" height="32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="g" x1="20" y1="10" x2="180" y2="190" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#8B5CF6"/>
-      <stop offset="0.5" stop-color="#6366F1"/>
-      <stop offset="1" stop-color="#06B6D4"/>
-    </linearGradient>
-  </defs>
-  <path d="M40 24H160C160 24 154 70 136 106L108 164C102 176 91 184 79 184H121C109 184 98 176 92 164L64 106C46 70 40 24 40 24Z" fill="url(#g)"/>
-  <path d="M52 46H148C148 46 143 78 130 104L110 146C106 154 100 158 94 158H106C100 158 94 154 90 146L70 104C57 78 52 46 52 46Z" fill="#0F172A" fill-opacity="0.2"/>
-  <rect x="65" y="65" width="38" height="7" rx="3.5" fill="white" fill-opacity="0.9"/>
-  <rect x="65" y="80" width="56" height="7" rx="3.5" fill="white" fill-opacity="0.78"/>
-  <rect x="65" y="95" width="30" height="7" rx="3.5" fill="white" fill-opacity="0.68"/>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="7" fill="#6366f1"/>
+  <!-- Table/grid icon: header + 3 rows -->
+  <rect x="6" y="8" width="20" height="4" rx="1.5" fill="white" fill-opacity="0.95"/>
+  <rect x="6" y="14" width="20" height="2.5" rx="1" fill="white" fill-opacity="0.6"/>
+  <rect x="6" y="18.5" width="14" height="2.5" rx="1" fill="white" fill-opacity="0.45"/>
+  <rect x="6" y="23" width="17" height="2.5" rx="1" fill="white" fill-opacity="0.3"/>
 </svg>

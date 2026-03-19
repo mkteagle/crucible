@@ -1,5 +1,5 @@
-import { addons } from "@storybook/manager-api";
-import { create } from "@storybook/theming/create";
+import { addons } from "storybook/manager-api";
+import { create } from "storybook/theming/create";
 
 const crucibleTheme = create({
   base: "light",
@@ -9,17 +9,17 @@ const crucibleTheme = create({
   brandImage: "/crucible-logo.svg",
   brandTarget: "_self",
 
-  colorPrimary: "#8B5CF6",
+  colorPrimary: "#6366F1",
   colorSecondary: "#6366F1",
 
-  appBg: "#f8f9fa",
-  appContentBg: "#ffffff",
-  appPreviewBg: "#f3f4f6",
-  appBorderColor: "rgba(0,0,0,0.08)",
+  appBg: "#f5f5f5",
+  appContentBg: "#f5f5f5",
+  appPreviewBg: "#f5f5f5",
+  appBorderColor: "rgba(0,0,0,0.07)",
   appBorderRadius: 8,
 
-  fontBase: '"IBM Plex Sans", system-ui, sans-serif',
-  fontCode: '"IBM Plex Mono", "Fira Code", monospace',
+  fontBase: '"DM Sans", system-ui, sans-serif',
+  fontCode: '"DM Mono", "Fira Code", monospace',
 
   textColor: "#111111",
   textInverseColor: "#ffffff",

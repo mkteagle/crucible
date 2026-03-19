@@ -33,7 +33,7 @@ const meta: Meta<typeof DataGrid> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ padding: '2rem', background: 'linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%)', minHeight: '100vh' }}>
+      <div style={{ padding: '2rem', background: '#f5f5f5', minHeight: '100vh' }}>
         <Story />
       </div>
     ),
@@ -50,9 +50,9 @@ export const BasicSorting: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Basic Sorting</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Basic Sorting</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Click column headers to sort. Click again to reverse, and once more to clear sorting.
           </p>
           {sortState && (
@@ -81,9 +81,9 @@ export const DefaultSorted: Story = {
 
     return (
       <div style={{ height: '600px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Default Sorted</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Default Sorted</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Grid starts with data sorted by Name in ascending order.
           </p>
         </div>

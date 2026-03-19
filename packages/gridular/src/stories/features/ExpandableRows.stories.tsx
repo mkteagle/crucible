@@ -48,9 +48,9 @@ const meta: Meta<typeof DataGrid> = {
   decorators: [
     (Story) => (
       <div style={{
-        padding: '2rem',
+        padding: '2rem', fontFamily: '"DM Sans", system-ui, sans-serif',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f5f3f0 0%, #e8e5e0 100%)',
+        background: '#f5f5f5',
       }}>
         <Story />
       </div>
@@ -68,9 +68,9 @@ export const BasicExpanded: Story = {
 
     return (
       <div style={{ height: '700px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Expandable Rows</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Expandable Rows</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Click the chevron icon in the first column to expand row details.
           </p>
         </div>
@@ -113,9 +113,9 @@ export const ExpandedWithVirtualization: Story = {
 
     return (
       <div style={{ height: '700px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Expandable Rows + Virtualization</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Expandable Rows + Virtualization</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             200 rows with expandable content. Virtualization handles dynamic heights automatically.
           </p>
         </div>
@@ -171,9 +171,9 @@ export const CustomStyledExpanded: Story = {
 
     return (
       <div style={{ height: '700px' }}>
-        <div className="mb-4 p-4 bg-white rounded-lg shadow">
-          <h3 className="font-ui text-lg font-semibold text-charcoal mb-2">Fully Custom Styled Expansion</h3>
-          <p className="font-ui text-sm text-gray-600">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Fully Custom Styled Expansion</h3>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
             Complete control over expanded content styling - render whatever the hell you want!
           </p>
         </div>

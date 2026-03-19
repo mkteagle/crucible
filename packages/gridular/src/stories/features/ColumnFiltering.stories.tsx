@@ -9,6 +9,13 @@ const meta: Meta<typeof DataGrid> = {
   parameters: {
     layout: 'fullscreen',
   },
+  decorators: [
+    (Story) => (
+      <div style={{ padding: '2rem', minHeight: '100vh', background: '#f5f5f5', fontFamily: '"DM Sans", system-ui, sans-serif' }}>
+        <Story />
+      </div>
+    ),
+  ],
   tags: ['autodocs'],
 };
 
@@ -118,21 +125,21 @@ export const BasicFiltering: Story = {
     const [filterState, setFilterState] = useState<FilterState>({});
 
     return (
-      <div className="p-6">
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold mb-2">Column Filtering</h2>
-          <p className="text-gray-600 mb-4">
+      <div className="">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Column Filtering</h2>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-3">
             Click the filter icon in any column header to filter the data. The filter uses
             case-insensitive substring matching by default.
           </p>
           {Object.keys(filterState).length > 0 && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+            <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
               <strong className="text-blue-900">Active Filters:</strong>
               <div className="mt-2 flex flex-wrap gap-2">
                 {Object.entries(filterState).map(([col, value]) => (
                   <span
                     key={col}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-medium"
+                    className="px-2 py-[3px] bg-indigo-50 border border-indigo-100 text-indigo-700 rounded text-[11.5px] font-mono"
                   >
                     {col}: "{value}"
                   </span>
@@ -206,10 +213,10 @@ export const CustomFilterFunctions: Story = {
     ];
 
     return (
-      <div className="p-6">
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold mb-2">Custom Filter Functions</h2>
-          <p className="text-gray-600 mb-4">
+      <div className="">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Custom Filter Functions</h2>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-3">
             Different columns can have custom filtering logic:
           </p>
           <ul className="list-disc list-inside text-gray-600 mb-4 space-y-1">
@@ -218,13 +225,13 @@ export const CustomFilterFunctions: Story = {
             <li><strong>Other columns:</strong> Default case-insensitive substring matching</li>
           </ul>
           {Object.keys(filterState).length > 0 && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+            <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
               <strong className="text-blue-900">Active Filters:</strong>
               <div className="mt-2 flex flex-wrap gap-2">
                 {Object.entries(filterState).map(([col, value]) => (
                   <span
                     key={col}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-medium"
+                    className="px-2 py-[3px] bg-indigo-50 border border-indigo-100 text-indigo-700 rounded text-[11.5px] font-mono"
                   >
                     {col}: "{value}"
                   </span>
@@ -269,21 +276,21 @@ export const FilteringWithPagination: Story = {
     });
 
     return (
-      <div className="p-6">
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold mb-2">Filtering with Pagination</h2>
-          <p className="text-gray-600 mb-4">
+      <div className="">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Filtering with Pagination</h2>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-3">
             Filters are applied to the entire dataset before pagination.
             Showing {filteredData.length} of {employees.length} total records.
           </p>
           {Object.keys(filterState).length > 0 && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+            <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
               <strong className="text-blue-900">Active Filters:</strong>
               <div className="mt-2 flex flex-wrap gap-2">
                 {Object.entries(filterState).map(([col, value]) => (
                   <span
                     key={col}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-medium"
+                    className="px-2 py-[3px] bg-indigo-50 border border-indigo-100 text-indigo-700 rounded text-[11.5px] font-mono"
                   >
                     {col}: "{value}"
                   </span>
@@ -339,21 +346,21 @@ export const SelectiveFiltering: Story = {
     ];
 
     return (
-      <div className="p-6">
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold mb-2">Selective Column Filtering</h2>
-          <p className="text-gray-600 mb-4">
+      <div className="">
+        <div className="mb-5 rounded-xl bg-white border border-black/[0.07] shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] p-5">
+          <h2 className="text-[11px] font-mono uppercase tracking-[0.08em] text-gray-400 mb-2">Selective Column Filtering</h2>
+          <p className="text-[13px] text-gray-600 leading-relaxed mb-3">
             Some columns have filtering disabled (ID and Salary columns).
             Notice they don't show filter icons.
           </p>
           {Object.keys(filterState).length > 0 && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+            <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
               <strong className="text-blue-900">Active Filters:</strong>
               <div className="mt-2 flex flex-wrap gap-2">
                 {Object.entries(filterState).map(([col, value]) => (
                   <span
                     key={col}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-medium"
+                    className="px-2 py-[3px] bg-indigo-50 border border-indigo-100 text-indigo-700 rounded text-[11.5px] font-mono"
                   >
                     {col}: "{value}"
                   </span>

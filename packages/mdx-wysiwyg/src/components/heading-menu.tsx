@@ -27,7 +27,7 @@ export function HeadingMenu({
         boxShadow: "var(--mdx-editor-shadow, var(--shadow-lg, 0 10px 15px -3px rgba(0,0,0,.1)))",
         border: "1px solid var(--mdx-editor-border, var(--cloud, #dde4ea))",
       }}
-      onMouseDown={(event: { stopPropagation: () => any; }) => event.stopPropagation()}
+      onMouseDown={(event) => event.preventDefault()}
       onClick={(event) => event.stopPropagation()}
     >
       {(["h1", "h2", "h3", "h4", "h5", "h6"] as const).map((tag) => (

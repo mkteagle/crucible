@@ -5,13 +5,18 @@ const preview: Preview = {
   parameters: {
     layout: "padded",
     backgrounds: {
-      default: "light",
-      values: [
-        { name: "light", value: "#f3f4f6" },
-        { name: "white", value: "#ffffff" },
-      ],
+      options: {
+        light: { name: "light", value: "#f5f5f5" },
+        white: { name: "white", value: "#ffffff" }
+      }
     },
   },
+
+  initialGlobals: {
+    backgrounds: {
+      value: "light"
+    }
+  }
 };
 
 export default preview;
