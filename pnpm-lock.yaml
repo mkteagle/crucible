@@ -68,21 +68,6 @@ importers:
 
   packages/crucible-ui:
     dependencies:
-      '@crucible-ui/dialog':
-        specifier: workspace:*
-        version: link:../dialog
-      '@crucible-ui/gridular':
-        specifier: workspace:*
-        version: link:../gridular
-      '@crucible-ui/lyric-ipsum':
-        specifier: workspace:*
-        version: link:../lyric-ipsum
-      '@crucible-ui/mdx':
-        specifier: workspace:*
-        version: link:../mdx-wysiwyg
-      '@crucible-ui/popover':
-        specifier: workspace:*
-        version: link:../popover
       '@radix-ui/react-checkbox':
         specifier: ^1.3.3
         version: 1.3.3(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
