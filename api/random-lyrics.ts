@@ -26,21 +26,40 @@ const BROWSER_HEADERS = {
   "Upgrade-Insecure-Requests": "1",
 };
 
-async function fetchJson(url: string) {
-  const res = await fetch(url, {
-    headers: { ...BROWSER_HEADERS, Accept: "application/json, text/plain, */*" },
+async function fetchViaProxy(url: string): Promise<string> {
+  // Try AllOrigins proxy
+  const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+  const res = await fetch(proxyUrl, {
+    headers: { ...BROWSER_HEADERS, Accept: "*/*" },
   });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-  return res.json();
+  if (!res.ok) throw new Error(`Proxy ${res.status} ${res.statusText}`);
+  const data = (await res.json()) as { contents?: string };
+  if (!data.contents) throw new Error("Empty proxy response");
+  return data.contents;
+}
+
+async function fetchJson(url: string) {
+  try {
+    const res = await fetch(url, {
+      headers: { ...BROWSER_HEADERS, Accept: "application/json, text/plain, */*" },
+    });
+    if (res.ok) return res.json();
+  } catch { /* fall through to proxy */ }
+
+  const text = await fetchViaProxy(url);
+  return JSON.parse(text);
 }
 
 async function fetchHtml(url: string) {
-  const res = await fetch(url, {
-    headers: { ...BROWSER_HEADERS, Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
-    redirect: "follow",
-  });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-  return res.text();
+  try {
+    const res = await fetch(url, {
+      headers: { ...BROWSER_HEADERS, Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
+      redirect: "follow",
+    });
+    if (res.ok) return res.text();
+  } catch { /* fall through to proxy */ }
+
+  return fetchViaProxy(url);
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
