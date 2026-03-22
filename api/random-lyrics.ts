@@ -48,26 +48,11 @@ async function fetchViaProxy(url: string): Promise<string> {
 }
 
 async function fetchJson(url: string) {
-  try {
-    const res = await fetch(url, {
-      headers: { ...BROWSER_HEADERS, Accept: "application/json, text/plain, */*" },
-    });
-    if (res.ok) return res.json();
-  } catch { /* fall through to proxy */ }
-
   const text = await fetchViaProxy(url);
   return JSON.parse(text);
 }
 
 async function fetchHtml(url: string) {
-  try {
-    const res = await fetch(url, {
-      headers: { ...BROWSER_HEADERS, Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
-      redirect: "follow",
-    });
-    if (res.ok) return res.text();
-  } catch { /* fall through to proxy */ }
-
   return fetchViaProxy(url);
 }
 
