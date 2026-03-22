@@ -635,32 +635,43 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
   // Determine if we should use virtualization
   const shouldVirtualize = processedData.length > virtualizationThreshold;
 
-  // Column widths with defaults - spread evenly if no custom widths
+  // Column widths — always fill container, proportionally scale if needed
+  const columnWidthMap = useMemo(() => {
+    if (!containerWidth || columns.length === 0) {
+      // No container measured yet — use explicit widths or default
+      return Object.fromEntries(
+        columns.map((col) => [col.id, columnWidths[col.id] ?? col.width ?? 150])
+      );
+    }
+
+    // Calculate raw widths
+    const rawWidths = columns.map((col) => ({
+      id: col.id,
+      width: columnWidths[col.id] ?? col.width ?? (containerWidth / columns.length),
+      isManual: !!columnWidths[col.id],
+    }));
+
+    const rawTotal = rawWidths.reduce((sum, w) => sum + w.width, 0);
+
+    // If columns don't fill container, scale them proportionally
+    if (rawTotal < containerWidth) {
+      const scale = containerWidth / rawTotal;
+      return Object.fromEntries(
+        rawWidths.map((w) => [w.id, Math.floor(w.width * scale)])
+      );
+    }
+
+    return Object.fromEntries(rawWidths.map((w) => [w.id, w.width]));
+  }, [columns, columnWidths, containerWidth]);
+
   const getColumnWidth = useCallback((column: ColumnDef<T>) => {
-    // If user has manually resized this column, use that width
-    if (columnWidths[column.id]) {
-      return columnWidths[column.id];
-    }
-    // If column has a defined width, use that
-    if (column.width) {
-      return column.width;
-    }
-    // Otherwise, calculate equal width based on container
-    if (containerWidth > 0 && columns.length > 0) {
-      return containerWidth / columns.length;
-    }
-    return 150;
-  }, [columnWidths, containerWidth, columns.length]);
+    return columnWidthMap[column.id] ?? 150;
+  }, [columnWidthMap]);
 
   const totalWidth = useMemo(() => {
-    const columnsSum = columns.reduce((acc, col) => {
-      if (columnWidths[col.id]) return acc + columnWidths[col.id];
-      if (col.width) return acc + col.width;
-      return acc + (containerWidth > 0 ? containerWidth / columns.length : 150);
-    }, 0);
-    // Always fill container width — expand to container if columns are narrower
-    return containerWidth > 0 ? Math.max(columnsSum, containerWidth) : columnsSum;
-  }, [columns, columnWidths, containerWidth]);
+    const sum = columns.reduce((acc, col) => acc + getColumnWidth(col), 0);
+    return containerWidth > 0 ? Math.max(sum, containerWidth) : sum;
+  }, [columns, getColumnWidth, containerWidth]);
 
   // Sort handler
   const handleSort = (columnId: string) => {
