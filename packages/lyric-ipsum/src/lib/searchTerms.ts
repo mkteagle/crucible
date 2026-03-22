@@ -1,0 +1,16 @@
+export const RANDOM_SEARCH_TERMS = [
+  "love", "heart", "night", "day", "time", "life", "world", "way", "eyes",
+  "light", "dream", "fire", "water", "home", "soul", "mind", "dance", "music",
+  "baby", "girl", "boy", "woman", "man", "feel", "never", "always", "forever",
+  "tonight", "yesterday", "tomorrow", "crazy", "wild", "free", "fly", "run",
+  "walk", "talk", "sing", "play", "rock", "roll", "blue", "red", "black",
+  "white", "gold", "silver", "shine", "star", "moon", "sun", "rain", "wind",
+  "storm", "peace", "war", "hope", "fear", "joy", "pain", "smile", "cry",
+  "laugh", "kiss", "hold", "touch", "break", "fall", "rise", "high", "low",
+  "fast", "slow", "hot", "cold", "young", "old", "new", "gone", "stay",
+  "leave", "come", "go", "turn", "change", "move", "stop", "start", "end",
+  "begin", "door", "window", "road", "street", "city", "town", "mountain",
+  "ocean", "river", "tree", "flower", "bird", "angel", "devil", "heaven",
+  "hell", "church", "school", "work", "party", "friends", "family", "mother",
+  "father", "sister", "brother",
+];

@@ -1,10 +1,10 @@
 import { addons } from "storybook/manager-api";
-import { create } from "storybook/theming/create";
+import { create } from "storybook/theming";
 
 const crucibleTheme = create({
   base: "light",
 
-  brandTitle: "Crucible UI",
+  brandTitle: "Crucible UI v1.0.0",
   brandUrl: "/",
   brandImage: "/crucible-logo.svg",
   brandTarget: "_self",

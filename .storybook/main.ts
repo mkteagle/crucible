@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import type { StorybookConfig } from "@storybook/react-vite";
 import tailwindcss from "@tailwindcss/vite";
 import path, { dirname } from "path";
+import { lyricIpsumApiPlugin } from "./lyric-ipsum-api-plugin";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -12,7 +13,11 @@ const config: StorybookConfig = {
     "../stories/**/*.stories.@(js|jsx|ts|tsx)",
     "../packages/*/src/stories/**/*.stories.@(js|jsx|ts|tsx)",
   ],
-  addons: ["@storybook/addon-docs"],
+  addons: [
+    "@storybook/addon-docs",
+    "@storybook/addon-vitest",
+    "@storybook/addon-a11y"
+  ],
   staticDirs: ["../public"],
   framework: {
     name: "@storybook/react-vite",
@@ -31,6 +36,7 @@ const config: StorybookConfig = {
   viteFinal(config) {
     config.plugins = config.plugins ?? [];
     config.plugins.push(tailwindcss());
+    config.plugins.push(lyricIpsumApiPlugin());
     config.resolve = config.resolve ?? {};
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -38,6 +44,8 @@ const config: StorybookConfig = {
       "@crucible-ui/dialog": path.resolve(__dirname, "../packages/dialog/src/index.ts"),
       "@crucible-ui/popover": path.resolve(__dirname, "../packages/popover/src/index.ts"),
       "@crucible-ui/gridular": path.resolve(__dirname, "../packages/gridular/src/index.ts"),
+      "@crucible-ui/lyric-ipsum": path.resolve(__dirname, "../packages/lyric-ipsum/src/index.ts"),
+      "@crucible-ui/lyric-ipsum/api": path.resolve(__dirname, "../packages/lyric-ipsum/src/api/index.ts"),
     };
     return config;
   },

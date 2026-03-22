@@ -18,9 +18,7 @@
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "scripts": {
     "build": "tsup && mkdir -p dist/styles && cp src/styles/editor.css dist/styles/editor.css",
     "dev": "tsup --watch",

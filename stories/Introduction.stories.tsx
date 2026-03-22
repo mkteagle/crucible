@@ -13,51 +13,40 @@ const meta: Meta = {
 
 export default meta;
 
-const packages = [
+const modules = [
   {
-    name: "@crucible-ui/gridular",
-    version: "4.0.0",
-    description: "High-performance virtualized React data grid with grouping, sorting, filtering, column management, and 100k+ row virtualization",
-    status: "stable",
+    path: "crucible-ui/gridular",
+    description: "High-performance virtualized data grid with grouping, sorting, filtering, and 100k+ row support",
+    tag: "component",
   },
   {
-    name: "@crucible-ui/mdx",
-    version: "1.1.0",
+    path: "crucible-ui/mdx",
     description: "Headless WYSIWYG editor with MDX serialization, plugin system, and composable React components",
-    status: "stable",
+    tag: "editor",
   },
   {
-    name: "@crucible-ui/popover",
-    version: "0.3.0",
-    description: "Style-agnostic Popover primitive built on the native Popover API with JS anchor positioning, placement, and alignment control",
-    status: "stable",
+    path: "crucible-ui/popover",
+    description: "Style-agnostic Popover primitive built on the native Popover API with placement and alignment",
+    tag: "primitive",
   },
   {
-    name: "@crucible-ui/dialog",
-    version: "0.1.1",
+    path: "crucible-ui/dialog",
     description: "Style-agnostic Dialog primitive built on the native <dialog> API",
-    status: "stable",
+    tag: "primitive",
+  },
+  {
+    path: "crucible-ui/lyric-ipsum",
+    description: "Random song lyrics generator — search or shuffle tracks from Genius, no API keys needed",
+    tag: "tool",
   },
 ];
 
-const Badge = ({ status }: { status: string }) => (
-  <span
-    style={{
-      display: "inline-flex",
-      alignItems: "center",
-      padding: "2px 8px",
-      borderRadius: 99,
-      fontSize: 11,
-      fontWeight: 500,
-      letterSpacing: "0.03em",
-      background: status === "stable" ? "#f0fdf4" : "#fef9c3",
-      color: status === "stable" ? "#16a34a" : "#854d0e",
-      border: `1px solid ${status === "stable" ? "rgba(22,163,74,0.2)" : "rgba(133,77,14,0.2)"}`,
-    }}
-  >
-    {status}
-  </span>
-);
+const tagColors: Record<string, { bg: string; fg: string; border: string }> = {
+  component: { bg: "#f0fdf4", fg: "#16a34a", border: "rgba(22,163,74,0.2)" },
+  editor: { bg: "#eff6ff", fg: "#2563eb", border: "rgba(37,99,235,0.2)" },
+  primitive: { bg: "#faf5ff", fg: "#7c3aed", border: "rgba(124,58,237,0.2)" },
+  tool: { bg: "#fef9c3", fg: "#854d0e", border: "rgba(133,77,14,0.2)" },
+};
 
 function IntroductionPage() {
   return (
@@ -89,176 +78,112 @@ function IntroductionPage() {
           <rect x="65" y="95" width="30" height="7" rx="3.5" fill="white" fillOpacity="0.68"/>
         </svg>
         <div>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: 28,
-              fontWeight: 700,
-              letterSpacing: "-0.5px",
-              color: "#111111",
-              lineHeight: 1.2,
-            }}
-          >
-            Crucible{" "}
-            <span style={{ color: "#8B5CF6" }}>UI</span>
+          <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, letterSpacing: "-0.5px", color: "#111111", lineHeight: 1.2 }}>
+            Crucible <span style={{ color: "#8B5CF6" }}>UI</span>
           </h1>
-          <p style={{ margin: "4px 0 0", fontSize: 13, color: "#6b7280", fontWeight: 400 }}>
-            Headless UI primitives for React
-          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+            <p style={{ margin: 0, fontSize: 13, color: "#6b7280", fontWeight: 400 }}>
+              Headless UI primitives for React
+            </p>
+            <span style={{
+              fontFamily: '"IBM Plex Mono", monospace',
+              fontSize: 11,
+              fontWeight: 500,
+              color: "#6366F1",
+              background: "rgba(99,102,241,0.06)",
+              border: "1px solid rgba(99,102,241,0.15)",
+              borderRadius: 6,
+              padding: "2px 8px",
+            }}>
+              v1.0.0
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Description */}
-      <div
-        style={{
-          padding: "24px 28px",
-          background: "#f8f9fa",
-          borderRadius: 12,
-          border: "1px solid rgba(0,0,0,0.06)",
-          marginBottom: 48,
-        }}
-      >
+      <div style={{ padding: "24px 28px", background: "#f8f9fa", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", marginBottom: 48 }}>
         <p style={{ margin: 0, fontSize: 15, color: "#374151", lineHeight: 1.65 }}>
-          Crucible UI is a set of unstyled, composable React primitives designed to be
-          dropped into any design system. Components handle logic and accessibility —
-          you own the styles.
+          Crucible UI ships as a single package with tree-shakeable subpath imports.
+          Each module handles logic and accessibility — you own the styles.
+          Install once, import only what you need.
         </p>
       </div>
 
-      {/* Packages */}
-      <h2
-        style={{
-          fontSize: 13,
-          fontWeight: 600,
-          color: "#9ca3af",
-          textTransform: "uppercase",
-          letterSpacing: "0.06em",
-          margin: "0 0 16px",
-        }}
-      >
-        Packages
+      {/* Modules */}
+      <h2 style={{ fontSize: 13, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 16px" }}>
+        Modules
       </h2>
 
-      <div
-        style={{
-          border: "1px solid rgba(0,0,0,0.08)",
-          borderRadius: 12,
-          overflow: "hidden",
-          marginBottom: 48,
-        }}
-      >
-        {packages.map((pkg, i) => (
-          <div
-            key={pkg.name}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto",
-              gap: 16,
-              padding: "20px 24px",
-              borderBottom: i < packages.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none",
-              background: "#ffffff",
-            }}
-          >
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                <span
-                  style={{
-                    fontFamily: '"IBM Plex Mono", "Fira Code", monospace',
-                    fontSize: 13,
-                    fontWeight: 500,
-                    color: "#111111",
-                  }}
-                >
-                  {pkg.name}
-                </span>
-                <Badge status={pkg.status} />
-              </div>
-              <p style={{ margin: 0, fontSize: 13, color: "#6b7280", lineHeight: 1.5 }}>
-                {pkg.description}
-              </p>
-            </div>
+      <div style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, overflow: "hidden", marginBottom: 48 }}>
+        {modules.map((mod, i) => {
+          const colors = tagColors[mod.tag] ?? tagColors.component;
+          return (
             <div
+              key={mod.path}
               style={{
-                display: "flex",
-                alignItems: "flex-start",
-                paddingTop: 2,
+                display: "grid",
+                gridTemplateColumns: "1fr auto",
+                gap: 16,
+                padding: "20px 24px",
+                borderBottom: i < modules.length - 1 ? "1px solid rgba(0,0,0,0.06)" : "none",
+                background: "#ffffff",
               }}
             >
-              <span
-                style={{
-                  fontFamily: '"IBM Plex Mono", monospace',
-                  fontSize: 12,
-                  fontWeight: 500,
-                  color: "#6366F1",
-                  background: "rgba(99,102,241,0.06)",
-                  border: "1px solid rgba(99,102,241,0.15)",
-                  borderRadius: 6,
-                  padding: "3px 10px",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                v{pkg.version}
-              </span>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                  <span style={{ fontFamily: '"IBM Plex Mono", "Fira Code", monospace', fontSize: 13, fontWeight: 500, color: "#111111" }}>
+                    {mod.path}
+                  </span>
+                  <span style={{
+                    display: "inline-flex", alignItems: "center", padding: "2px 8px", borderRadius: 99,
+                    fontSize: 11, fontWeight: 500, letterSpacing: "0.03em",
+                    background: colors.bg, color: colors.fg, border: `1px solid ${colors.border}`,
+                  }}>
+                    {mod.tag}
+                  </span>
+                </div>
+                <p style={{ margin: 0, fontSize: 13, color: "#6b7280", lineHeight: 1.5 }}>
+                  {mod.description}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Install */}
-      <h2
-        style={{
-          fontSize: 13,
-          fontWeight: 600,
-          color: "#9ca3af",
-          textTransform: "uppercase",
-          letterSpacing: "0.06em",
-          margin: "0 0 16px",
-        }}
-      >
+      <h2 style={{ fontSize: 13, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 16px" }}>
         Installation
       </h2>
 
-      <div
-        style={{
-          background: "#0f172a",
-          borderRadius: 10,
-          padding: "18px 24px",
-          marginBottom: 48,
-        }}
-      >
-        {packages.map((pkg) => (
+      <div style={{ background: "#0f172a", borderRadius: 10, padding: "18px 24px", marginBottom: 16 }}>
+        <div style={{ fontFamily: '"IBM Plex Mono", "Fira Code", monospace', fontSize: 13, color: "#94a3b8", lineHeight: 1.8 }}>
+          <span style={{ color: "#64748b" }}>$ </span>
+          <span style={{ color: "#e2e8f0" }}>pnpm add </span>
+          <span style={{ color: "#818cf8" }}>crucible-ui</span>
+        </div>
+      </div>
+
+      <div style={{ background: "#0f172a", borderRadius: 10, padding: "18px 24px", marginBottom: 48 }}>
+        {modules.map((mod) => (
           <div
-            key={pkg.name}
-            style={{
-              fontFamily: '"IBM Plex Mono", "Fira Code", monospace',
-              fontSize: 13,
-              color: "#94a3b8",
-              lineHeight: 1.8,
-            }}
+            key={mod.path}
+            style={{ fontFamily: '"IBM Plex Mono", "Fira Code", monospace', fontSize: 13, color: "#94a3b8", lineHeight: 1.8 }}
           >
-            <span style={{ color: "#64748b" }}>$ </span>
-            <span style={{ color: "#e2e8f0" }}>pnpm add </span>
-            <span style={{ color: "#818cf8" }}>{pkg.name}</span>
+            <span style={{ color: "#c084fc" }}>import</span>
+            <span style={{ color: "#e2e8f0" }}> {"{ ... }"} </span>
+            <span style={{ color: "#c084fc" }}>from</span>
+            <span style={{ color: "#e2e8f0" }}> </span>
+            <span style={{ color: "#86efac" }}>"{mod.path}"</span>
           </div>
         ))}
       </div>
 
       {/* Footer */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingTop: 32,
-          borderTop: "1px solid rgba(0,0,0,0.06)",
-        }}
-      >
-        <span style={{ fontSize: 12, color: "#9ca3af" }}>
-          MIT License · Built for React 18+
-        </span>
-        <span style={{ fontSize: 12, color: "#9ca3af" }}>
-          Last updated March 2026
-        </span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 32, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+        <span style={{ fontSize: 12, color: "#9ca3af" }}>MIT License</span>
+        <span style={{ fontSize: 12, color: "#9ca3af" }}>React 18+</span>
       </div>
     </div>
   );

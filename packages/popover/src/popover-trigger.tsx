@@ -2,7 +2,7 @@ import React from "react";
 import { usePopoverContext } from "./popover";
 
 export interface PopoverTriggerProps {
-  children: React.ReactElement<{ onClick?: React.MouseEventHandler; style?: React.CSSProperties }>;
+  children: React.ReactElement<{ onClick?: React.MouseEventHandler; style?: React.CSSProperties; ref?: React.Ref<HTMLElement> }>;
 }
 
 export function PopoverTrigger({ children }: PopoverTriggerProps) {
