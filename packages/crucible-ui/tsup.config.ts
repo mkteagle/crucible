@@ -22,8 +22,6 @@ export default defineConfig({
     "@tanstack/react-virtual",
     "@radix-ui/react-checkbox",
     "@radix-ui/react-context-menu",
-    "@radix-ui/react-dropdown-menu",
-    "@radix-ui/react-popover",
     "@radix-ui/react-select",
     "@radix-ui/react-slot",
     "class-variance-authority",
