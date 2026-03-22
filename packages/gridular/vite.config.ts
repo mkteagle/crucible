@@ -18,7 +18,7 @@ export default defineConfig({
       formats: ["es"],
     },
     rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime", "@tanstack/react-virtual"],
+      external: ["react", "react-dom", "react/jsx-runtime", "@tanstack/react-virtual", "@crucible-ui/popover"],
       output: {
         globals: {
           react: "React",
