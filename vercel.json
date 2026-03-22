@@ -1,5 +1,10 @@
 {
   "buildCommand": "pnpm build-storybook",
   "outputDirectory": "storybook-static",
-  "installCommand": "pnpm install"
+  "installCommand": "pnpm install",
+  "functions": {
+    "api/random-lyrics.ts": {
+      "maxDuration": 30
+    }
+  }
 }
