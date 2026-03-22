@@ -27,15 +27,24 @@ const BROWSER_HEADERS = {
 };
 
 async function fetchViaProxy(url: string): Promise<string> {
-  // Try AllOrigins proxy
-  const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-  const res = await fetch(proxyUrl, {
-    headers: { ...BROWSER_HEADERS, Accept: "*/*" },
-  });
-  if (!res.ok) throw new Error(`Proxy ${res.status} ${res.statusText}`);
-  const data = (await res.json()) as { contents?: string };
-  if (!data.contents) throw new Error("Empty proxy response");
-  return data.contents;
+  const proxies = [
+    { url: `https://corsproxy.io/?${encodeURIComponent(url)}`, raw: true },
+    { url: `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, raw: false },
+  ];
+
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy.url, {
+        headers: { ...BROWSER_HEADERS, Accept: "*/*" },
+      });
+      if (!res.ok) continue;
+      if (proxy.raw) return res.text();
+      const data = (await res.json()) as { contents?: string };
+      if (data.contents) return data.contents;
+    } catch { continue; }
+  }
+
+  throw new Error("All proxies failed");
 }
 
 async function fetchJson(url: string) {
