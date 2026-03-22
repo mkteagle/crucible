@@ -13,9 +13,22 @@ const RANDOM_TERMS = [
   "white", "gold", "silver", "shine", "star", "moon", "sun", "rain", "wind",
 ];
 
+const BROWSER_HEADERS = {
+  "User-Agent": USER_AGENT,
+  "Accept-Language": "en-US,en;q=0.9",
+  "Accept-Encoding": "gzip, deflate, br",
+  "Cache-Control": "no-cache",
+  Pragma: "no-cache",
+  "Sec-Fetch-Dest": "document",
+  "Sec-Fetch-Mode": "navigate",
+  "Sec-Fetch-Site": "none",
+  "Sec-Fetch-User": "?1",
+  "Upgrade-Insecure-Requests": "1",
+};
+
 async function fetchJson(url: string) {
   const res = await fetch(url, {
-    headers: { "User-Agent": USER_AGENT, Accept: "application/json" },
+    headers: { ...BROWSER_HEADERS, Accept: "application/json, text/plain, */*" },
   });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
   return res.json();
@@ -23,7 +36,7 @@ async function fetchJson(url: string) {
 
 async function fetchHtml(url: string) {
   const res = await fetch(url, {
-    headers: { "User-Agent": USER_AGENT, Accept: "text/html" },
+    headers: { ...BROWSER_HEADERS, Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
     redirect: "follow",
   });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
