@@ -28,6 +28,12 @@ export interface ColumnDef<T = any> {
   render?: (row: T) => ReactNode;
   groupFormatter?: (value: any) => string;
 
+  // Editing
+  enableEditing?: boolean;
+  editType?: 'text' | 'number' | 'select';
+  editOptions?: string[];
+  validateEdit?: (value: any, row: T) => boolean | string;
+
   // Custom filter UI
   renderFilterMenu?: (props: FilterMenuRenderProps<T>) => ReactNode;
 
@@ -134,6 +140,10 @@ export interface GridClasses {
   cellStyle?: CSSProperties;
   selectedCell?: string;
   selectedCellStyle?: CSSProperties;
+
+  // Editing
+  editingCell?: string;
+  editingCellStyle?: CSSProperties;
 
   // Expandable Rows
   expandedRow?: string;
@@ -243,6 +253,8 @@ export interface VirtualizedGridProps<T = any> {
   filterState?: FilterState;
   onFilterChange?: (filterState: FilterState) => void;
   enableFiltering?: boolean; // Default: false
+  showFilterButtons?: boolean; // Default: false — show filter buttons even when column menu is enabled
+  filterMode?: 'manual' | 'live'; // Default: 'manual' — 'live' applies filter on every keystroke
   renderFilterMenu?: (props: FilterMenuRenderProps) => ReactNode; // Custom filter menu renderer
 
   // Row Selection
@@ -254,6 +266,10 @@ export interface VirtualizedGridProps<T = any> {
   enableCellSelection?: boolean; // Default: false
   selectedCell?: { rowId: string; columnId: string } | null;
   onCellSelect?: (rowId: string, columnId: string) => void;
+
+  // Cell Editing
+  enableCellEditing?: boolean; // Default: false
+  onCellEditEnd?: (rowId: string, columnId: string, newValue: any, oldValue: any) => void;
 
   // Column Resize
   enableColumnResize?: boolean; // Default: false

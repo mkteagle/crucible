@@ -9,6 +9,8 @@ export { ExpandableGridRow, BaseExpandableRow } from './components/ExpandableGri
 export type { ExpandableGridRowProps } from './components/ExpandableGridRow';
 export { DataGridRow, BaseDataGridRow } from './components/DataGridRow';
 export type { DataGridRowProps } from './components/DataGridRow';
+export { EditableCell } from './components/EditableCell';
+export type { EditableCellProps } from './components/EditableCell';
 
 // Hooks
 export { useSelectCell } from './hooks/useSelectCell';

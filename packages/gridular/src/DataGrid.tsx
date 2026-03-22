@@ -9,6 +9,7 @@ import { Pagination } from './Pagination';
 import { ColumnManager } from './components/ColumnManager';
 import { GroupManager } from './components/GroupManager';
 import { Skeleton } from './components/Skeleton';
+import { EditableCell } from './components/EditableCell';
 import { useGridPersistence } from './hooks/useGridPersistence';
 import { useDataGrouping, GroupRow } from './hooks/useDataGrouping';
 import type {
@@ -175,6 +176,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
   filterState: controlledFilterState,
   onFilterChange: _onFilterChange,
   enableFiltering = false,
+  showFilterButtons = false,
+  filterMode = 'manual' as const,
 
   // Row Selection
   selectedRows: controlledSelectedRows,
@@ -185,6 +188,10 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
   enableCellSelection = false,
   selectedCell: controlledSelectedCell,
   onCellSelect,
+
+  // Cell Editing
+  enableCellEditing = false,
+  onCellEditEnd,
 
   // Column Resize
   enableColumnResize = false,
@@ -277,6 +284,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
   });
   const [internalExpandedRows, setInternalExpandedRows] = useState<Record<string, boolean>>({});
   const [internalSelectedCell, setInternalSelectedCell] = useState<{ rowId: string; columnId: string } | null>(null);
+
+  // Cell editing state
+  const [editingCell, setEditingCell] = useState<{
+    rowId: string;
+    columnId: string;
+    value: any;
+    originalValue: any;
+  } | null>(null);
 
   // Dragging state for column reorder
   const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
@@ -481,6 +496,28 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
     },
     [onCellSelect]
   );
+
+  // Cell editing handlers
+  const handleStartEdit = useCallback(
+    (rowId: string, columnId: string, currentValue: any) => {
+      setEditingCell({ rowId, columnId, value: currentValue, originalValue: currentValue });
+    },
+    []
+  );
+
+  const handleCommitEdit = useCallback(
+    (rowId: string, columnId: string, newValue: any, oldValue: any) => {
+      setEditingCell(null);
+      if (newValue !== oldValue) {
+        onCellEditEnd?.(rowId, columnId, newValue, oldValue);
+      }
+    },
+    [onCellEditEnd]
+  );
+
+  const handleCancelEdit = useCallback(() => {
+    setEditingCell(null);
+  }, []);
 
   // Context menu handlers
   const handleContextMenu = useCallback(
@@ -903,8 +940,8 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                       {enableSorting && renderSortIconDefault(column)}
                     </div>
 
-                {/* Standalone Filter Button (when overflow menu is disabled) */}
-                {enableFiltering && columnFilteringEnabled && !enableColumnMenu && !column.enableColumnMenu && (
+                {/* Standalone Filter Button (when overflow menu is disabled, or showFilterButtons is explicitly true) */}
+                {enableFiltering && columnFilteringEnabled && (showFilterButtons || (!enableColumnMenu && !column.enableColumnMenu)) && (
                   <Popover.Root
                     open={openFilterPopovers[column.id] || false}
                     onOpenChange={(open) => {
@@ -995,10 +1032,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                               type="text"
                               value={filterInputValues[column.id] ?? ''}
                               onChange={(e) => {
+                                const newValue = e.target.value;
                                 setFilterInputValues((prev) => ({
                                   ...prev,
-                                  [column.id]: e.target.value,
+                                  [column.id]: newValue,
                                 }));
+                                if (filterMode === 'live') {
+                                  handleFilterChange(column.id, newValue);
+                                }
                               }}
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
@@ -1161,10 +1202,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                                 type="text"
                                                 value={filterInputValues[column.id] ?? ''}
                                                 onChange={(e) => {
+                                                  const newValue = e.target.value;
                                                   setFilterInputValues((prev) => ({
                                                     ...prev,
-                                                    [column.id]: e.target.value,
+                                                    [column.id]: newValue,
                                                   }));
+                                                  if (filterMode === 'live') {
+                                                    handleFilterChange(column.id, newValue);
+                                                  }
                                                 }}
                                                 onKeyDown={(e) => {
                                                   if (e.key === 'Enter') {
@@ -1287,10 +1332,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                               type="text"
                                               value={filterInputValues[column.id] ?? ''}
                                               onChange={(e) => {
+                                                const newValue = e.target.value;
                                                 setFilterInputValues((prev) => ({
                                                   ...prev,
-                                                  [column.id]: e.target.value,
+                                                  [column.id]: newValue,
                                                 }));
+                                                if (filterMode === 'live') {
+                                                  handleFilterChange(column.id, newValue);
+                                                }
                                               }}
                                               onKeyDown={(e) => {
                                                 if (e.key === 'Enter') {
@@ -1413,10 +1462,14 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
                                           type="text"
                                           value={filterInputValues[column.id] ?? ''}
                                           onChange={(e) => {
+                                            const newValue = e.target.value;
                                             setFilterInputValues((prev) => ({
                                               ...prev,
-                                              [column.id]: e.target.value,
+                                              [column.id]: newValue,
                                             }));
+                                            if (filterMode === 'live') {
+                                              handleFilterChange(column.id, newValue);
+                                            }
                                           }}
                                           onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
@@ -1588,6 +1641,11 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
           renderGroupRow={renderGroupRow}
           onScroll={onScroll}
           onContextMenu={handleContextMenu}
+          enableCellEditing={enableCellEditing}
+          editingCell={editingCell}
+          onStartEdit={handleStartEdit}
+          onCommitEdit={handleCommitEdit}
+          onCancelEdit={handleCancelEdit}
         />
       ) : (
         <StandardBody
@@ -1616,6 +1674,11 @@ export function DataGrid<T extends Record<string, any> = Record<string, any>>({
           groupingState={groupingState}
           renderGroupRow={renderGroupRow}
           onContextMenu={handleContextMenu}
+          enableCellEditing={enableCellEditing}
+          editingCell={editingCell}
+          onStartEdit={handleStartEdit}
+          onCommitEdit={handleCommitEdit}
+          onCancelEdit={handleCancelEdit}
         />
       )}
 
@@ -1689,6 +1752,11 @@ function VirtualizedBody<T extends Record<string, any>>({
   renderGroupRow,
   onScroll,
   onContextMenu,
+  enableCellEditing,
+  editingCell,
+  onStartEdit,
+  onCommitEdit,
+  onCancelEdit,
 }: any) {
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -1867,6 +1935,9 @@ function VirtualizedBody<T extends Record<string, any>>({
                   const isCellSelected = enableCellSelection &&
                     selectedCell?.rowId === rowId &&
                     selectedCell?.columnId === column.id;
+                  const isCellEditing = enableCellEditing &&
+                    editingCell?.rowId === rowId &&
+                    editingCell?.columnId === column.id;
 
                   return (
                     <div
@@ -1876,17 +1947,26 @@ function VirtualizedBody<T extends Record<string, any>>({
                         classes?.cell,
                         column.cellClassName,
                         isCellSelected && 'ring-2 ring-indigo-500 ring-inset',
-                        isCellSelected && classes?.selectedCell
+                        isCellSelected && classes?.selectedCell,
+                        isCellEditing && 'editing',
+                        isCellEditing && classes?.editingCell
                       )}
                       style={{
                         ...tssToInlineStyles(classes?.cellStyle),
                         ...tssToInlineStyles(column.cellStyle),
+                        ...(isCellEditing ? tssToInlineStyles(classes?.editingCellStyle) : undefined),
                         width: getColumnWidth(column),
                       }}
                       onClick={(e) => {
                         if (enableCellSelection) {
                           e.stopPropagation();
                           onCellSelect(rowId, column.id);
+                        }
+                      }}
+                      onDoubleClick={(e) => {
+                        if (enableCellEditing && column.enableEditing) {
+                          e.stopPropagation();
+                          onStartEdit(rowId, column.id, item[column.key]);
                         }
                       }}
                       onContextMenu={(e) => {
@@ -1896,6 +1976,15 @@ function VirtualizedBody<T extends Record<string, any>>({
                         }
                       }}
                     >
+                      {isCellEditing ? (
+                        <EditableCell
+                          value={editingCell.value}
+                          row={item}
+                          column={column}
+                          onCommit={(newValue) => onCommitEdit(rowId, column.id, newValue, editingCell.originalValue)}
+                          onCancel={onCancelEdit}
+                        />
+                      ) : (
                       <div className="cell-content">
                         {/* Show skeleton if this is a skeleton row */}
                         {(item as any).__skeleton ? (
@@ -1928,6 +2017,7 @@ function VirtualizedBody<T extends Record<string, any>>({
                           </>
                         )}
                       </div>
+                      )}
                     </div>
                   );
                 })}
@@ -1971,6 +2061,11 @@ function StandardBody<T extends Record<string, any>>({
   groupingState,
   renderGroupRow,
   onContextMenu,
+  enableCellEditing,
+  editingCell,
+  onStartEdit,
+  onCommitEdit,
+  onCancelEdit,
 }: any) {
   return (
     <div className={cn('virtualized-grid-body', classes?.body)} style={{ width: totalWidth }}>
@@ -2076,6 +2171,9 @@ function StandardBody<T extends Record<string, any>>({
                 const isCellSelected = enableCellSelection &&
                   selectedCell?.rowId === rowId &&
                   selectedCell?.columnId === column.id;
+                const isCellEditing = enableCellEditing &&
+                  editingCell?.rowId === rowId &&
+                  editingCell?.columnId === column.id;
 
                 return (
                   <div
@@ -2085,17 +2183,26 @@ function StandardBody<T extends Record<string, any>>({
                       classes?.cell,
                       column.cellClassName,
                       isCellSelected && 'ring-2 ring-indigo-500 ring-inset',
-                      isCellSelected && classes?.selectedCell
+                      isCellSelected && classes?.selectedCell,
+                      isCellEditing && 'editing',
+                      isCellEditing && classes?.editingCell
                     )}
                     style={{
                       ...tssToInlineStyles(classes?.cellStyle),
                       ...tssToInlineStyles(column.cellStyle),
+                      ...(isCellEditing ? tssToInlineStyles(classes?.editingCellStyle) : undefined),
                       width: getColumnWidth(column),
                     }}
                     onClick={(e) => {
                       if (enableCellSelection) {
                         e.stopPropagation();
                         onCellSelect(rowId, column.id);
+                      }
+                    }}
+                    onDoubleClick={(e) => {
+                      if (enableCellEditing && column.enableEditing) {
+                        e.stopPropagation();
+                        onStartEdit(rowId, column.id, (item as any)[column.key]);
                       }
                     }}
                     onContextMenu={(e) => {
@@ -2105,6 +2212,15 @@ function StandardBody<T extends Record<string, any>>({
                       }
                     }}
                   >
+                    {isCellEditing ? (
+                      <EditableCell
+                        value={editingCell.value}
+                        row={item}
+                        column={column as any}
+                        onCommit={(newValue) => onCommitEdit(rowId, column.id, newValue, editingCell.originalValue)}
+                        onCancel={onCancelEdit}
+                      />
+                    ) : (
                     <div className="cell-content">
                       {/* Show skeleton if this is a skeleton row */}
                       {(item as any).__skeleton ? (
@@ -2137,6 +2253,7 @@ function StandardBody<T extends Record<string, any>>({
                         </>
                       )}
                     </div>
+                    )}
                   </div>
                 );
               })}
